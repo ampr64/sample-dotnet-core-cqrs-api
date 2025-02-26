@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autofac;
 using MediatR;
-using SampleProject.Application;
 using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Infrastructure.Processing

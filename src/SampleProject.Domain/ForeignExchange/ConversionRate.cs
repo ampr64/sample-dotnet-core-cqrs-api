@@ -1,5 +1,4 @@
-﻿using System;
-using SampleProject.Domain.SharedKernel;
+﻿using SampleProject.Domain.SharedKernel;
 
 namespace SampleProject.Domain.ForeignExchange
 {

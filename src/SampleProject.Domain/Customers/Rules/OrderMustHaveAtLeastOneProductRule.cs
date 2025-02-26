@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.SeedWork;

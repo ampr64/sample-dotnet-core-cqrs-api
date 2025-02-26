@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SampleProject.Application;
 using SampleProject.Application.Configuration;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Infrastructure.Processing.Outbox;

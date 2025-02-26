@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Autofac;
 using MediatR;
-using SampleProject.Application;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.DomainEvents;
 using SampleProject.Application.Configuration.Processing;

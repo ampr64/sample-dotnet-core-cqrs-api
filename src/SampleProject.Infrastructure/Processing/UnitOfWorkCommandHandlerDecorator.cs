@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SampleProject.Application;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure.Database;

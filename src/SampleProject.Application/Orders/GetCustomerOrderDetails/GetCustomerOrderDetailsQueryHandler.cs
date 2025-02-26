@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
-using MediatR;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Queries;
 

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using MediatR;
 using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Configuration.Processing

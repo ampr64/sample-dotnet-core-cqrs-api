@@ -9,7 +9,6 @@ using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 using SampleProject.Application.Configuration.Validation;
-using SampleProject.Application.Orders.GetCustomerOrders;
 
 namespace SampleProject.Infrastructure.Processing
 {

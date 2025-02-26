@@ -1,5 +1,4 @@
 ﻿using System;
-using MediatR;
 using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrderDetails

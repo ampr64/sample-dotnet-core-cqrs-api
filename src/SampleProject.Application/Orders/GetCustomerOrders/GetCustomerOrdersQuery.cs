@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MediatR;
 using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrders

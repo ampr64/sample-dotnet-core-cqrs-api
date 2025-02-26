@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SampleProject.Application.Configuration.Processing;
 using SampleProject.Application.Customers;
 using SampleProject.Infrastructure.Database;
 

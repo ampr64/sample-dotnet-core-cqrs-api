@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using SampleProject.Application.Configuration.DomainEvents;
 
 namespace SampleProject.Infrastructure.Processing
 {

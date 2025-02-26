@@ -1,5 +1,4 @@
 ﻿using System;
-using MediatR;
 using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Orders.RemoveCustomerOrder

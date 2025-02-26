@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SampleProject.Application;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.Payments;

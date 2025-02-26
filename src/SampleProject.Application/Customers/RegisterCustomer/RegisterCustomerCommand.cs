@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SampleProject.Application.Configuration.Commands;
+﻿using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Customers.RegisterCustomer
 {

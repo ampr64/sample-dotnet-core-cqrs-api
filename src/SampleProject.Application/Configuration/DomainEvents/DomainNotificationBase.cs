@@ -1,5 +1,4 @@
 ﻿using System;
-using MediatR;
 using Newtonsoft.Json;
 using SampleProject.Domain.SeedWork;
 
