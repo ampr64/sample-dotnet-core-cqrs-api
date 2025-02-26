@@ -16,13 +16,11 @@ namespace SampleProject.Application.Orders.RemoveCustomerOrder
             this._customerRepository = customerRepository;
         }
 
-        public async Task<Unit> Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
         {
             var customer = await this._customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
 
             customer.RemoveOrder(new OrderId(request.OrderId));
-
-            return Unit.Value;
         }
     }
 }

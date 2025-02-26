@@ -103,7 +103,7 @@ namespace SampleProject.API
             return new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{Context}] {Message:lj}{NewLine}{Exception}")
-                .WriteTo.RollingFile(new CompactJsonFormatter(), "logs/logs")
+                .WriteTo.File(new CompactJsonFormatter(), "logs/logs")
                 .CreateLogger();
         }
     }

@@ -17,7 +17,7 @@ namespace SampleProject.Infrastructure.Processing
             var result = Cache.GetOrAdd(targetType,
                 t => t.GetTypeInfo().DeclaredConstructors.ToArray());
 
-            return result.Length > 0 ? result : throw new NoConstructorsFoundException(targetType);
+            return result.Length > 0 ? result : throw new NoConstructorsFoundException(targetType, this);
         }
     }
 }

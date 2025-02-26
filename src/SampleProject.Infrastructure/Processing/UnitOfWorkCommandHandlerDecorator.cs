@@ -28,7 +28,7 @@ namespace SampleProject.Infrastructure.Processing
             _ordersContext = ordersContext;
         }
 
-        public async Task<Unit> Handle(T command, CancellationToken cancellationToken)
+        public async Task Handle(T command, CancellationToken cancellationToken)
         {
             await this._decorated.Handle(command, cancellationToken);
 
@@ -45,8 +45,6 @@ namespace SampleProject.Infrastructure.Processing
             }
 
             await this._unitOfWork.CommitAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }
