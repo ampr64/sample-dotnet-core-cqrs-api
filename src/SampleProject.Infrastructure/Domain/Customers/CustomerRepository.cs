@@ -8,14 +8,9 @@ using SampleProject.Infrastructure.SeedWork;
 
 namespace SampleProject.Infrastructure.Domain.Customers
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository(OrdersContext context) : ICustomerRepository
     {
-        private readonly OrdersContext _context;
-
-        public CustomerRepository(OrdersContext context)
-        {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+        private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
         public async Task AddAsync(Customer customer)
         {

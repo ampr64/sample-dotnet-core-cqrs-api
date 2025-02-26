@@ -5,26 +5,18 @@ using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Orders.ChangeCustomerOrder
 {
-    public class ChangeCustomerOrderCommand : CommandBase<Unit>
+    public class ChangeCustomerOrderCommand(
+        Guid customerId,
+        Guid orderId,
+        List<ProductDto> products,
+        string currency) : CommandBase<Unit>
     {
-        public Guid CustomerId { get; }
+        public Guid CustomerId { get; } = customerId;
 
-        public Guid OrderId { get; }
+        public Guid OrderId { get; } = orderId;
 
-        public string Currency { get; }
+        public string Currency { get; } = currency;
 
-        public List<ProductDto> Products { get; }
-
-        public ChangeCustomerOrderCommand(
-            Guid customerId, 
-            Guid orderId,
-            List<ProductDto> products, 
-            string currency)
-        {
-            this.CustomerId = customerId;
-            this.OrderId = orderId;
-            this.Currency = currency;
-            this.Products = products;
-        }
+        public List<ProductDto> Products { get; } = products;
     }
 }

@@ -14,14 +14,9 @@ namespace SampleProject.API.Orders
 {
     [Route("api/customers")]
     [ApiController]
-    public class CustomerOrdersController : Controller
+    public class CustomerOrdersController(IMediator mediator) : Controller
     {
-        private readonly IMediator _mediator;
-
-        public CustomerOrdersController(IMediator mediator)
-        {
-            this._mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         /// <summary>
         /// Get customer orders.

@@ -8,21 +8,14 @@ using SampleProject.Domain.Customers.Orders;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder
 {
-    public class OrderPlacedNotificationHandler : INotificationHandler<OrderPlacedNotification>
+    public class OrderPlacedNotificationHandler(
+        IEmailSender emailSender,
+        EmailsSettings emailsSettings,
+        ISqlConnectionFactory sqlConnectionFactory) : INotificationHandler<OrderPlacedNotification>
     {
-        private readonly IEmailSender _emailSender;
-        private readonly EmailsSettings _emailsSettings;
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public OrderPlacedNotificationHandler(
-            IEmailSender emailSender, 
-            EmailsSettings emailsSettings, 
-            ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _emailSender = emailSender;
-            _emailsSettings = emailsSettings;
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly IEmailSender _emailSender = emailSender;
+        private readonly EmailsSettings _emailsSettings = emailsSettings;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public async Task Handle(OrderPlacedNotification request, CancellationToken cancellationToken)
         {

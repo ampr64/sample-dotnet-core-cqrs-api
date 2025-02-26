@@ -9,18 +9,12 @@ using SampleProject.Infrastructure.Database;
 
 namespace SampleProject.Infrastructure.Processing.InternalCommands
 {
-    public class CommandsDispatcher : ICommandsDispatcher
+    public class CommandsDispatcher(
+        IMediator mediator,
+        OrdersContext ordersContext) : ICommandsDispatcher
     {
-        private readonly IMediator _mediator;
-        private readonly OrdersContext _ordersContext;
-
-        public CommandsDispatcher(
-            IMediator mediator, 
-            OrdersContext ordersContext)
-        {
-            this._mediator = mediator;
-            this._ordersContext = ordersContext;
-        }
+        private readonly IMediator _mediator = mediator;
+        private readonly OrdersContext _ordersContext = ordersContext;
 
         public async Task DispatchCommandAsync(Guid id)
         {

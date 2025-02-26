@@ -7,21 +7,14 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Application.Customers.RegisterCustomer
 {
-    public class RegisterCustomerCommandHandler : ICommandHandler<RegisterCustomerCommand, CustomerDto>
+    public class RegisterCustomerCommandHandler(
+        ICustomerRepository customerRepository,
+        ICustomerUniquenessChecker customerUniquenessChecker,
+        IUnitOfWork unitOfWork) : ICommandHandler<RegisterCustomerCommand, CustomerDto>
     {
-        private readonly ICustomerRepository _customerRepository;
-        private readonly ICustomerUniquenessChecker _customerUniquenessChecker;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public RegisterCustomerCommandHandler(
-            ICustomerRepository customerRepository, 
-            ICustomerUniquenessChecker customerUniquenessChecker, 
-            IUnitOfWork unitOfWork)
-        {
-            this._customerRepository = customerRepository;
-            _customerUniquenessChecker = customerUniquenessChecker;
-            _unitOfWork = unitOfWork;
-        }
+        private readonly ICustomerRepository _customerRepository = customerRepository;
+        private readonly ICustomerUniquenessChecker _customerUniquenessChecker = customerUniquenessChecker;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<CustomerDto> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
         {

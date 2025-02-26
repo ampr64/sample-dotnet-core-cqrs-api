@@ -9,14 +9,9 @@ namespace SampleProject.API.Customers
 {
     [Route("api/customers")]
     [ApiController]
-    public class CustomersController : Controller
+    public class CustomersController(IMediator mediator) : Controller
     {
-        private readonly IMediator _mediator;
-
-        public CustomersController(IMediator mediator)
-        {
-            this._mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         /// <summary>
         /// Register customer.

@@ -7,14 +7,9 @@ using SampleProject.Application.Payments.SendEmailAfterPayment;
 
 namespace SampleProject.Application.Payments
 {
-    public class PaymentCreatedNotificationHandler : INotificationHandler<PaymentCreatedNotification>
+    public class PaymentCreatedNotificationHandler(ICommandsScheduler commandsScheduler) : INotificationHandler<PaymentCreatedNotification>
     {
-        private readonly ICommandsScheduler _commandsScheduler;
-
-        public PaymentCreatedNotificationHandler(ICommandsScheduler commandsScheduler)
-        {
-            _commandsScheduler = commandsScheduler;
-        }
+        private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
 
         public async Task Handle(PaymentCreatedNotification request, CancellationToken cancellationToken)
         {

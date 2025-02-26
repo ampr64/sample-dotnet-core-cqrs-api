@@ -5,14 +5,9 @@ using SampleProject.Infrastructure.Caching;
 
 namespace SampleProject.Infrastructure.Domain.ForeignExchanges
 {
-    public class ForeignExchange : IForeignExchange
+    public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
     {
-        private readonly ICacheStore _cacheStore;
-
-        public ForeignExchange(ICacheStore cacheStore)
-        {
-            _cacheStore = cacheStore;
-        }
+        private readonly ICacheStore _cacheStore = cacheStore;
 
         public List<ConversionRate> GetConversionRates()
         {

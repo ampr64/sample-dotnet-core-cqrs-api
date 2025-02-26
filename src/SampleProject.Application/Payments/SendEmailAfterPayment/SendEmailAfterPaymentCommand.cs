@@ -6,14 +6,9 @@ using SampleProject.Domain.Payments;
 
 namespace SampleProject.Application.Payments.SendEmailAfterPayment
 {
-    public class SendEmailAfterPaymentCommand : InternalCommandBase<Unit>
+    [method: JsonConstructor]
+    public class SendEmailAfterPaymentCommand(Guid id, PaymentId paymentId) : InternalCommandBase<Unit>(id)
     {
-        public PaymentId PaymentId { get; }
-
-        [JsonConstructor]
-        public SendEmailAfterPaymentCommand(Guid id, PaymentId paymentId) : base(id)
-        {
-            this.PaymentId = paymentId;
-        }
+        public PaymentId PaymentId { get; } = paymentId;
     }
 }

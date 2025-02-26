@@ -13,17 +13,11 @@ using Serilog.Events;
 
 namespace SampleProject.Infrastructure.Processing.Outbox
 {
-    internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxCommand, Unit>
+    internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessOutboxCommand, Unit>
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _mediator = mediator;
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
         {
@@ -66,14 +60,10 @@ namespace SampleProject.Infrastructure.Processing.Outbox
             return Unit.Value;
         }
 
-        private class OutboxMessageContextEnricher : ILogEventEnricher
+        private class OutboxMessageContextEnricher(IDomainEventNotification notification) : ILogEventEnricher
         {
-            private readonly IDomainEventNotification _notification;
+            private readonly IDomainEventNotification _notification = notification;
 
-            public OutboxMessageContextEnricher(IDomainEventNotification notification)
-            {
-                _notification = notification;
-            }
             public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
             {
                 logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"OutboxMessage:{_notification.Id.ToString()}")));

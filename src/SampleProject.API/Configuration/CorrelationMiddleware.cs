@@ -4,17 +4,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace SampleProject.API.Configuration
 {
-    internal class CorrelationMiddleware
+    internal class CorrelationMiddleware(
+        RequestDelegate next)
     {
         internal const string CorrelationHeaderKey = "CorrelationId";
 
-        private readonly RequestDelegate _next;
-
-        public CorrelationMiddleware(
-            RequestDelegate next)
-        {
-            this._next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task Invoke(HttpContext context)
         {

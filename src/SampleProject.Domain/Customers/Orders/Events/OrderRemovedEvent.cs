@@ -2,13 +2,8 @@
 
 namespace SampleProject.Domain.Customers.Orders.Events
 {
-    public class OrderRemovedEvent : DomainEventBase
+    public class OrderRemovedEvent(OrderId orderId) : DomainEventBase
     {
-        public OrderId OrderId { get; }
-
-        public OrderRemovedEvent(OrderId orderId)
-        {
-            this.OrderId = orderId;
-        }
+        public OrderId OrderId { get; } = orderId;
     }
 }

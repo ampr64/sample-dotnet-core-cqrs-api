@@ -3,16 +3,10 @@ using SampleProject.Domain.SharedKernel;
 
 namespace SampleProject.Domain.Products
 {
-    public class ProductPriceData : ValueObject
+    public class ProductPriceData(ProductId productId, MoneyValue price) : ValueObject
     {
-        public ProductPriceData(ProductId productId, MoneyValue price)
-        {
-            ProductId = productId;
-            Price = price;
-        }
+        public ProductId ProductId { get; } = productId;
 
-        public ProductId ProductId { get; }
-
-        public MoneyValue Price { get; }
+        public MoneyValue Price { get; } = price;
     }
 }

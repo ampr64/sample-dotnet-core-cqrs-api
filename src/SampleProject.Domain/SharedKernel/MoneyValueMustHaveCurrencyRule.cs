@@ -2,14 +2,9 @@
 
 namespace SampleProject.Domain.SharedKernel
 {
-    public class MoneyValueMustHaveCurrencyRule : IBusinessRule
+    public class MoneyValueMustHaveCurrencyRule(string currency) : IBusinessRule
     {
-        private readonly string _currency;
-
-        public MoneyValueMustHaveCurrencyRule(string currency)
-        {
-            _currency = currency;
-        }
+        private readonly string _currency = currency;
 
         public bool IsBroken() => string.IsNullOrEmpty(_currency);
 

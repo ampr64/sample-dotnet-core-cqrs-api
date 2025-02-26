@@ -2,17 +2,11 @@
 
 namespace SampleProject.Domain.SeedWork
 {
-    public class BusinessRuleValidationException : Exception
+    public class BusinessRuleValidationException(IBusinessRule brokenRule) : Exception(brokenRule.Message)
     {
-        public IBusinessRule BrokenRule { get; }
+        public IBusinessRule BrokenRule { get; } = brokenRule;
 
-        public string Details { get; }
-
-        public BusinessRuleValidationException(IBusinessRule brokenRule) : base(brokenRule.Message)
-        {
-            BrokenRule = brokenRule;
-            this.Details = brokenRule.Message;
-        }
+        public string Details { get; } = brokenRule.Message;
 
         public override string ToString()
         {

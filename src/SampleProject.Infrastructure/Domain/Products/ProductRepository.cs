@@ -9,13 +9,9 @@ using SampleProject.Infrastructure.SeedWork;
 
 namespace SampleProject.Infrastructure.Domain.Products
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository(OrdersContext context) : IProductRepository
     {
-        private readonly OrdersContext _context;
-        public ProductRepository(OrdersContext context)
-        {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+        private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
         public async Task<List<Product>> GetByIdsAsync(List<ProductId> ids)
         {

@@ -2,20 +2,13 @@
 
 namespace SampleProject.Domain.ForeignExchange
 {
-    public class ConversionRate
+    public class ConversionRate(string sourceCurrency, string targetCurrency, decimal factor)
     {
-        public string SourceCurrency { get; }
+        public string SourceCurrency { get; } = sourceCurrency;
 
-        public string TargetCurrency { get; }
+        public string TargetCurrency { get; } = targetCurrency;
 
-        public decimal Factor { get; }
-
-        public ConversionRate(string sourceCurrency, string targetCurrency, decimal factor)
-        {
-            this.SourceCurrency = sourceCurrency;
-            this.TargetCurrency = targetCurrency;
-            this.Factor = factor;
-        }
+        public decimal Factor { get; } = factor;
 
         internal MoneyValue Convert(MoneyValue value)
         {

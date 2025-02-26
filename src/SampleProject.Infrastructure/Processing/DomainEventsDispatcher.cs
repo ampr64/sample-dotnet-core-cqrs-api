@@ -13,18 +13,11 @@ using SampleProject.Infrastructure.Processing.Outbox;
 
 namespace SampleProject.Infrastructure.Processing
 {
-    public class DomainEventsDispatcher : IDomainEventsDispatcher
+    public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, OrdersContext ordersContext) : IDomainEventsDispatcher
     {
-        private readonly IMediator _mediator;
-        private readonly ILifetimeScope _scope;
-        private readonly OrdersContext _ordersContext;
-
-        public DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, OrdersContext ordersContext)
-        {
-            this._mediator = mediator;
-            this._scope = scope;
-            this._ordersContext = ordersContext;
-        }
+        private readonly IMediator _mediator = mediator;
+        private readonly ILifetimeScope _scope = scope;
+        private readonly OrdersContext _ordersContext = ordersContext;
 
         public async Task DispatchEventsAsync()
         {

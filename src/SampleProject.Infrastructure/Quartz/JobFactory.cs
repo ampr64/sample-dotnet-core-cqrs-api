@@ -4,14 +4,9 @@ using Quartz.Spi;
 
 namespace SampleProject.Infrastructure.Quartz
 {
-    public class JobFactory : IJobFactory
+    public class JobFactory(IContainer container) : IJobFactory
     {
-        private readonly IContainer _container;
-
-        public JobFactory(IContainer container)
-        {
-            this._container = container;
-        }
+        private readonly IContainer _container = container;
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {

@@ -2,17 +2,11 @@
 
 namespace SampleProject.Domain.SharedKernel
 {
-    public class MoneyValueOperationMustBePerformedOnTheSameCurrencyRule : IBusinessRule
+    public class MoneyValueOperationMustBePerformedOnTheSameCurrencyRule(MoneyValue left, MoneyValue right) : IBusinessRule
     {
-        private readonly MoneyValue _left;
+        private readonly MoneyValue _left = left;
 
-        private readonly MoneyValue _right;
-
-        public MoneyValueOperationMustBePerformedOnTheSameCurrencyRule(MoneyValue left, MoneyValue right)
-        {
-            _left = left;
-            _right = right;
-        }
+        private readonly MoneyValue _right = right;
 
         public bool IsBroken() => _left.Currency != _right.Currency;
 

@@ -4,17 +4,11 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Application.Configuration.DomainEvents
 {
-    public class DomainNotificationBase<T> : IDomainEventNotification<T> where T : IDomainEvent
+    public class DomainNotificationBase<T>(T domainEvent) : IDomainEventNotification<T> where T : IDomainEvent
     {
         [JsonIgnore]
-        public T DomainEvent { get; }
+        public T DomainEvent { get; } = domainEvent;
 
-        public Guid Id { get; }
-
-        public DomainNotificationBase(T domainEvent)
-        {
-            this.Id = Guid.NewGuid();
-            this.DomainEvent = domainEvent;
-        }
+        public Guid Id { get; } = Guid.NewGuid();
     }
 }

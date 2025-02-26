@@ -5,14 +5,9 @@ using SampleProject.Application.Configuration;
 
 namespace SampleProject.API.Configuration
 {
-    public class ExecutionContextAccessor : IExecutionContextAccessor
+    public class ExecutionContextAccessor(IHttpContextAccessor httpContextAccessor) : IExecutionContextAccessor
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public ExecutionContextAccessor(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public Guid CorrelationId
         {

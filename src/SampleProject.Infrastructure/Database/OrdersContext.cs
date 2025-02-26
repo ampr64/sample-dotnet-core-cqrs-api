@@ -7,7 +7,7 @@ using SampleProject.Infrastructure.Processing.Outbox;
 
 namespace SampleProject.Infrastructure.Database
 {
-    public class OrdersContext : DbContext
+    public class OrdersContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -16,11 +16,6 @@ namespace SampleProject.Infrastructure.Database
         public DbSet<InternalCommand> InternalCommands { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
-
-        public OrdersContext(DbContextOptions options) : base(options)
-        {
-
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

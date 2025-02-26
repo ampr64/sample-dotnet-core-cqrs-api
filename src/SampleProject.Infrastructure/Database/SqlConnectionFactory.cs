@@ -5,15 +5,10 @@ using SampleProject.Application.Configuration.Data;
 
 namespace SampleProject.Infrastructure.Database
 {
-    public class SqlConnectionFactory : ISqlConnectionFactory, IDisposable
+    public class SqlConnectionFactory(string connectionString) : ISqlConnectionFactory, IDisposable
     {
-        private readonly string _connectionString;
+        private readonly string _connectionString = connectionString;
         private IDbConnection _connection;
-
-        public SqlConnectionFactory(string connectionString)
-        {
-            this._connectionString = connectionString;
-        }
 
         public IDbConnection GetOpenConnection()
         {

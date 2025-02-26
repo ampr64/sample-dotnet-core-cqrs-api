@@ -6,18 +6,12 @@ using SampleProject.Infrastructure.Processing;
 
 namespace SampleProject.Infrastructure.Domain
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(
+        OrdersContext ordersContext,
+        IDomainEventsDispatcher domainEventsDispatcher) : IUnitOfWork
     {
-        private readonly OrdersContext _ordersContext;
-        private readonly IDomainEventsDispatcher _domainEventsDispatcher;
-
-        public UnitOfWork(
-            OrdersContext ordersContext, 
-            IDomainEventsDispatcher domainEventsDispatcher)
-        {
-            this._ordersContext = ordersContext;
-            this._domainEventsDispatcher = domainEventsDispatcher;
-        }
+        private readonly OrdersContext _ordersContext = ordersContext;
+        private readonly IDomainEventsDispatcher _domainEventsDispatcher = domainEventsDispatcher;
 
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

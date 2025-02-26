@@ -6,14 +6,9 @@ using SampleProject.Domain.Customers.Orders;
 
 namespace SampleProject.Application.Orders.RemoveCustomerOrder
 {
-    public class RemoveCustomerOrderCommandHandler : ICommandHandler<RemoveCustomerOrderCommand>
+    public class RemoveCustomerOrderCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<RemoveCustomerOrderCommand>
     {
-        private readonly ICustomerRepository _customerRepository;
-
-        public RemoveCustomerOrderCommandHandler(ICustomerRepository customerRepository)
-        {
-            this._customerRepository = customerRepository;
-        }
+        private readonly ICustomerRepository _customerRepository = customerRepository;
 
         public async Task Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
         {

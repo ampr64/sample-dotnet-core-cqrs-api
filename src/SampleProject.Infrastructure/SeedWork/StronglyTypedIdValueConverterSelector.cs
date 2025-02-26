@@ -9,15 +9,10 @@ namespace SampleProject.Infrastructure.SeedWork
     /// <summary>
     /// Based on https://andrewlock.net/strongly-typed-ids-in-ef-core-using-strongly-typed-entity-ids-to-avoid-primitive-obsession-part-4/
     /// </summary>
-    public class StronglyTypedIdValueConverterSelector : ValueConverterSelector
+    public class StronglyTypedIdValueConverterSelector(ValueConverterSelectorDependencies dependencies) : ValueConverterSelector(dependencies)
     {
         private readonly ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo> _converters
             = new ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo>();
-
-        public StronglyTypedIdValueConverterSelector(ValueConverterSelectorDependencies dependencies) 
-            : base(dependencies)
-        {
-        }
 
         public override IEnumerable<ValueConverterInfo> Select(Type modelClrType, Type providerClrType = null)
         {

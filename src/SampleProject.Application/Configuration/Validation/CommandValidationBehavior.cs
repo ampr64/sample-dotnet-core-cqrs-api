@@ -8,14 +8,9 @@ using MediatR;
 
 namespace SampleProject.Application.Configuration.Validation
 {
-    public class CommandValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class CommandValidationBehavior<TRequest, TResponse>(IList<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly IList<IValidator<TRequest>> _validators;
-
-        public CommandValidationBehavior(IList<IValidator<TRequest>> validators)
-        {
-            this._validators = validators;
-        }
+        private readonly IList<IValidator<TRequest>> _validators = validators;
 
         public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {

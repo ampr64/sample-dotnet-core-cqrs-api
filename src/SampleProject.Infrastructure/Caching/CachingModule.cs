@@ -4,14 +4,9 @@ using Autofac;
 
 namespace SampleProject.Infrastructure.Caching
 {
-    public class CachingModule : Module
+    public class CachingModule(Dictionary<string, TimeSpan> expirationConfiguration) : Module
     {
-        private readonly Dictionary<string, TimeSpan> _expirationConfiguration;
-
-        public CachingModule(Dictionary<string, TimeSpan> expirationConfiguration)
-        {
-            _expirationConfiguration = expirationConfiguration;
-        }
+        private readonly Dictionary<string, TimeSpan> _expirationConfiguration = expirationConfiguration;
 
         protected override void Load(ContainerBuilder builder)
         {

@@ -6,14 +6,9 @@ using SampleProject.Domain.Customers;
 
 namespace SampleProject.Application.Customers
 {
-    public class MarkCustomerAsWelcomedCommand : InternalCommandBase<Unit>
+    [method: JsonConstructor]
+    public class MarkCustomerAsWelcomedCommand(Guid id, CustomerId customerId) : InternalCommandBase<Unit>(id)
     {
-        [JsonConstructor]
-        public MarkCustomerAsWelcomedCommand(Guid id, CustomerId customerId) : base(id)
-        {
-            CustomerId = customerId;
-        }
-
-        public CustomerId CustomerId { get; }
+        public CustomerId CustomerId { get; } = customerId;
     }
 }

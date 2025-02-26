@@ -2,16 +2,10 @@
 
 namespace SampleProject.Domain.Customers.Orders
 {
-    public class OrderProductData
+    public class OrderProductData(ProductId productId, int quantity)
     {
-        public OrderProductData(ProductId productId, int quantity)
-        {
-            ProductId = productId;
-            Quantity = quantity;
-        }
+        public ProductId ProductId { get; } = productId;
 
-        public ProductId ProductId { get; }
-
-        public int Quantity { get; }
+        public int Quantity { get; } = quantity;
     }
 }

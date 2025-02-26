@@ -14,14 +14,9 @@ using SampleProject.Infrastructure.SeedWork;
 
 namespace SampleProject.Infrastructure.Database
 {
-    public class DataAccessModule : Autofac.Module
+    public class DataAccessModule(string databaseConnectionString) : Autofac.Module
     {
-        private readonly string _databaseConnectionString;
-
-        public DataAccessModule(string databaseConnectionString)
-        {
-            this._databaseConnectionString = databaseConnectionString;
-        }
+        private readonly string _databaseConnectionString = databaseConnectionString;
 
         protected override void Load(ContainerBuilder builder)
         {

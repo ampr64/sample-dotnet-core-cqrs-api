@@ -5,14 +5,9 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Domain.Customers.Rules
 {
-    public class CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule : IBusinessRule
+    public class CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(IList<Order> orders) : IBusinessRule
     {
-        private readonly IList<Order> _orders;
-
-        public CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(IList<Order> orders)
-        {
-            _orders = orders;
-        }
+        private readonly IList<Order> _orders = orders;
 
         public bool IsBroken()
         {

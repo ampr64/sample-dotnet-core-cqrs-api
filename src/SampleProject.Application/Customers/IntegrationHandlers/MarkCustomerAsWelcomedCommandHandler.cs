@@ -6,14 +6,9 @@ using SampleProject.Domain.Customers.Orders;
 
 namespace SampleProject.Application.Customers.IntegrationHandlers
 {
-    public class MarkCustomerAsWelcomedCommandHandler : ICommandHandler<MarkCustomerAsWelcomedCommand, Unit>
+    public class MarkCustomerAsWelcomedCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<MarkCustomerAsWelcomedCommand, Unit>
     {
-        private readonly ICustomerRepository _customerRepository;
-
-        public MarkCustomerAsWelcomedCommandHandler(ICustomerRepository customerRepository)
-        {
-            _customerRepository = customerRepository;
-        }
+        private readonly ICustomerRepository _customerRepository = customerRepository;
 
         public async Task<Unit> Handle(MarkCustomerAsWelcomedCommand command, CancellationToken cancellationToken)
         {

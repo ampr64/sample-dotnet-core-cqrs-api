@@ -3,18 +3,12 @@ using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Orders.RemoveCustomerOrder
 {
-    public class RemoveCustomerOrderCommand : CommandBase
+    public class RemoveCustomerOrderCommand(
+        Guid customerId,
+        Guid orderId) : CommandBase
     {
-        public Guid CustomerId { get; }
+        public Guid CustomerId { get; } = customerId;
 
-        public Guid OrderId { get; }
-
-        public RemoveCustomerOrderCommand(
-            Guid customerId,
-            Guid orderId)
-        {
-            this.CustomerId = customerId;
-            this.OrderId = orderId;
-        }
+        public Guid OrderId { get; } = orderId;
     }
 }

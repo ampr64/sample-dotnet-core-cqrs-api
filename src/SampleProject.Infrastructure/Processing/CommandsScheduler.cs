@@ -8,14 +8,9 @@ using SampleProject.Application.Configuration.Processing;
 
 namespace SampleProject.Infrastructure.Processing
 {
-    public class CommandsScheduler : ICommandsScheduler
+    public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICommandsScheduler
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public async Task EnqueueAsync<T>(ICommand<T> command)
         {

@@ -4,14 +4,9 @@ using SampleProject.Domain.Customers;
 
 namespace SampleProject.Application.Customers.DomainServices
 {
-    public class CustomerUniquenessChecker : ICustomerUniquenessChecker
+    public class CustomerUniquenessChecker(ISqlConnectionFactory sqlConnectionFactory) : ICustomerUniquenessChecker
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public CustomerUniquenessChecker(ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public bool IsUnique(string customerEmail)
         {

@@ -8,23 +8,16 @@ using SampleProject.Infrastructure.Database;
 
 namespace SampleProject.Infrastructure.Processing
 {
-    public class UnitOfWorkCommandHandlerDecorator<T> : ICommandHandler<T> where T:ICommand
+    public class UnitOfWorkCommandHandlerDecorator<T>(
+        ICommandHandler<T> decorated,
+        IUnitOfWork unitOfWork,
+        OrdersContext ordersContext) : ICommandHandler<T> where T:ICommand
     {
-        private readonly ICommandHandler<T> _decorated;
+        private readonly ICommandHandler<T> _decorated = decorated;
 
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        private readonly OrdersContext _ordersContext;
-
-        public UnitOfWorkCommandHandlerDecorator(
-            ICommandHandler<T> decorated, 
-            IUnitOfWork unitOfWork, 
-            OrdersContext ordersContext)
-        {
-            _decorated = decorated;
-            _unitOfWork = unitOfWork;
-            _ordersContext = ordersContext;
-        }
+        private readonly OrdersContext _ordersContext = ordersContext;
 
         public async Task Handle(T command, CancellationToken cancellationToken)
         {

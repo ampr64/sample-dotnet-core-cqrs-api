@@ -3,10 +3,7 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Domain.Payments
 {
-    public class PaymentId : TypedIdValueBase
+    public class PaymentId(Guid value) : TypedIdValueBase(value)
     {
-        public PaymentId(Guid value) : base(value)
-        {
-        }
     }
 }

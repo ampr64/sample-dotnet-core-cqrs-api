@@ -6,14 +6,9 @@ using SampleProject.Infrastructure.Database;
 
 namespace SampleProject.Infrastructure.Domain.Payments
 {
-    public class PaymentRepository : IPaymentRepository
+    public class PaymentRepository(OrdersContext context) : IPaymentRepository
     {
-        private readonly OrdersContext _context;
-
-        public PaymentRepository(OrdersContext context)
-        {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+        private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
         public async Task<Payment> GetByIdAsync(PaymentId id)
         {

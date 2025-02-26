@@ -11,23 +11,17 @@ using Serilog.Events;
 
 namespace SampleProject.Infrastructure.Logging
 {
-    internal class LoggingCommandHandlerDecorator<T> : ICommandHandler<T> where T : ICommand
+    internal class LoggingCommandHandlerDecorator<T>(
+        ILogger logger,
+        IExecutionContextAccessor executionContextAccessor,
+        ICommandHandler<T> decorated) : ICommandHandler<T> where T : ICommand
     {
-        private readonly ILogger _logger;
+        private readonly ILogger _logger = logger;
 
-        private readonly IExecutionContextAccessor _executionContextAccessor;
+        private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
 
-        private readonly ICommandHandler<T> _decorated;
+        private readonly ICommandHandler<T> _decorated = decorated;
 
-        public LoggingCommandHandlerDecorator(
-            ILogger logger,
-            IExecutionContextAccessor executionContextAccessor,
-            ICommandHandler<T> decorated)
-        {
-            _logger = logger;
-            _executionContextAccessor = executionContextAccessor;
-            _decorated = decorated;
-        }
         public async Task Handle(T command, CancellationToken cancellationToken)
         {
             if (command is IRecurringCommand)
@@ -61,28 +55,19 @@ namespace SampleProject.Infrastructure.Logging
             }
         }
 
-        private class CommandLogEnricher : ILogEventEnricher
+        private class CommandLogEnricher(ICommand command) : ILogEventEnricher
         {
-            private readonly ICommand _command;
+            private readonly ICommand _command = command;
 
-            public CommandLogEnricher(ICommand command)
-            {
-                _command = command;
-            }
             public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
             {
                 logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"Command:{_command.Id.ToString()}")));
             }
         }
 
-        private class RequestLogEnricher : ILogEventEnricher
+        private class RequestLogEnricher(IExecutionContextAccessor executionContextAccessor) : ILogEventEnricher
         {
-            private readonly IExecutionContextAccessor _executionContextAccessor;
-
-            public RequestLogEnricher(IExecutionContextAccessor executionContextAccessor)
-            {
-                _executionContextAccessor = executionContextAccessor;
-            }
+            private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
 
             public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
             {

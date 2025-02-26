@@ -7,18 +7,12 @@ using SampleProject.Domain.Payments;
 
 namespace SampleProject.Application.Payments.SendEmailAfterPayment
 {
-    public class SendEmailAfterPaymentCommandHandler : ICommandHandler<SendEmailAfterPaymentCommand, Unit>
+    public class SendEmailAfterPaymentCommandHandler(
+        IEmailSender emailSender,
+        IPaymentRepository paymentRepository) : ICommandHandler<SendEmailAfterPaymentCommand, Unit>
     {
-        private readonly IEmailSender _emailSender;
-        private readonly IPaymentRepository _paymentRepository;
-
-        public SendEmailAfterPaymentCommandHandler(
-            IEmailSender emailSender, 
-            IPaymentRepository paymentRepository)
-        {
-            _emailSender = emailSender;
-            _paymentRepository = paymentRepository;
-        }
+        private readonly IEmailSender _emailSender = emailSender;
+        private readonly IPaymentRepository _paymentRepository = paymentRepository;
 
         public async Task<Unit> Handle(SendEmailAfterPaymentCommand request, CancellationToken cancellationToken)
         {

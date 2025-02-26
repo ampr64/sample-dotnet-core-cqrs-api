@@ -6,14 +6,9 @@ using SampleProject.Domain.Payments;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder
 {
-    public class OrderPlacedDomainEventHandler : INotificationHandler<OrderPlacedEvent>
+    public class OrderPlacedDomainEventHandler(IPaymentRepository paymentRepository) : INotificationHandler<OrderPlacedEvent>
     {
-        private readonly IPaymentRepository _paymentRepository;
-
-        public OrderPlacedDomainEventHandler(IPaymentRepository paymentRepository)
-        {
-            _paymentRepository = paymentRepository;
-        }
+        private readonly IPaymentRepository _paymentRepository = paymentRepository;
 
         public async Task Handle(OrderPlacedEvent notification, CancellationToken cancellationToken)
         {

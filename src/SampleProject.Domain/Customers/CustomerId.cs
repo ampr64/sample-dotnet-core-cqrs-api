@@ -3,10 +3,7 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Domain.Customers
 {
-    public class CustomerId : TypedIdValueBase
+    public class CustomerId(Guid value) : TypedIdValueBase(value)
     {
-        public CustomerId(Guid value) : base(value)
-        {
-        }
     }
 }

@@ -6,14 +6,9 @@ using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Customers.GetCustomerDetails
 {
-    public class GetCustomerDetailsQueryHandler : IQueryHandler<GetCustomerDetailsQuery, CustomerDetailsDto>
+    public class GetCustomerDetailsQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetCustomerDetailsQuery, CustomerDetailsDto>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public GetCustomerDetailsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public Task<CustomerDetailsDto> Handle(GetCustomerDetailsQuery request, CancellationToken cancellationToken)
         {

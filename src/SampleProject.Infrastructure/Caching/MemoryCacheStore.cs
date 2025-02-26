@@ -4,18 +4,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace SampleProject.Infrastructure.Caching
 {
-    public class MemoryCacheStore : ICacheStore
+    public class MemoryCacheStore(
+        IMemoryCache memoryCache,
+        Dictionary<string, TimeSpan> expirationConfiguration) : ICacheStore
     {
-        private readonly IMemoryCache _memoryCache;
-        private readonly Dictionary<string, TimeSpan> _expirationConfiguration;
-
-        public MemoryCacheStore(
-            IMemoryCache memoryCache,
-            Dictionary<string, TimeSpan> expirationConfiguration)
-        {
-            _memoryCache = memoryCache;
-            this._expirationConfiguration = expirationConfiguration;
-        }
+        private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly Dictionary<string, TimeSpan> _expirationConfiguration = expirationConfiguration;
 
         public void Add<TItem>(TItem item, ICacheKey<TItem> key, TimeSpan? expirationTime = null)
         {

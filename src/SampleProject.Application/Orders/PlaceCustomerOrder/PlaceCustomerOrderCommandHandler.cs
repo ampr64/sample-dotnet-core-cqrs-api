@@ -11,23 +11,16 @@ using SampleProject.Domain.Products;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder
 {
-    public class PlaceCustomerOrderCommandHandler : ICommandHandler<PlaceCustomerOrderCommand, Guid>
+    public class PlaceCustomerOrderCommandHandler(
+        ICustomerRepository customerRepository,
+        IForeignExchange foreignExchange,
+        ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<PlaceCustomerOrderCommand, Guid>
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerRepository _customerRepository = customerRepository;
         
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
         
-        private readonly IForeignExchange _foreignExchange;
-
-        public PlaceCustomerOrderCommandHandler(
-            ICustomerRepository customerRepository,
-            IForeignExchange foreignExchange, 
-            ISqlConnectionFactory sqlConnectionFactory)
-        {
-            this._customerRepository = customerRepository;
-            this._foreignExchange = foreignExchange;
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly IForeignExchange _foreignExchange = foreignExchange;
 
         public async Task<Guid> Handle(PlaceCustomerOrderCommand command, CancellationToken cancellationToken)
         {

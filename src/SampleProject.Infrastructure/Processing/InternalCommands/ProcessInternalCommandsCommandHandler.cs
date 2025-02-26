@@ -9,15 +9,10 @@ using SampleProject.Application.Configuration.Data;
 
 namespace SampleProject.Infrastructure.Processing.InternalCommands
 {
-    internal class ProcessInternalCommandsCommandHandler : ICommandHandler<ProcessInternalCommandsCommand, Unit>
+    internal class ProcessInternalCommandsCommandHandler(
+        ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessInternalCommandsCommand, Unit>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public ProcessInternalCommandsCommandHandler(
-            ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
         public async Task<Unit> Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
         {

@@ -2,13 +2,8 @@
 
 namespace SampleProject.Domain.Customers
 {
-    public class CustomerRegisteredEvent : DomainEventBase
+    public class CustomerRegisteredEvent(CustomerId customerId) : DomainEventBase
     {
-        public CustomerId CustomerId { get; }
-
-        public CustomerRegisteredEvent(CustomerId customerId)
-        {
-            this.CustomerId = customerId;
-        }
+        public CustomerId CustomerId { get; } = customerId;
     }
 }

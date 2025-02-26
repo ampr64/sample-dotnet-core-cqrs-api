@@ -6,15 +6,10 @@ using SampleProject.Application.Configuration.Processing;
 
 namespace SampleProject.Application.Customers.IntegrationHandlers
 {
-    public class CustomerRegisteredNotificationHandler : INotificationHandler<CustomerRegisteredNotification>
+    public class CustomerRegisteredNotificationHandler(
+        ICommandsScheduler commandsScheduler) : INotificationHandler<CustomerRegisteredNotification>
     {
-        private readonly ICommandsScheduler _commandsScheduler;
-
-        public CustomerRegisteredNotificationHandler(
-            ICommandsScheduler commandsScheduler)
-        {
-            _commandsScheduler = commandsScheduler;
-        }
+        private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
 
         public async Task Handle(CustomerRegisteredNotification notification, CancellationToken cancellationToken)
         {

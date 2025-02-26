@@ -2,19 +2,13 @@
 
 namespace SampleProject.Domain.Customers.Rules
 {
-    public class CustomerEmailMustBeUniqueRule : IBusinessRule
+    public class CustomerEmailMustBeUniqueRule(
+        ICustomerUniquenessChecker customerUniquenessChecker,
+        string email) : IBusinessRule
     {
-        private readonly ICustomerUniquenessChecker _customerUniquenessChecker;
+        private readonly ICustomerUniquenessChecker _customerUniquenessChecker = customerUniquenessChecker;
 
-        private readonly string _email;
-
-        public CustomerEmailMustBeUniqueRule(
-            ICustomerUniquenessChecker customerUniquenessChecker, 
-            string email)
-        {
-            _customerUniquenessChecker = customerUniquenessChecker;
-            _email = email;
-        }
+        private readonly string _email = email;
 
         public bool IsBroken() => !_customerUniquenessChecker.IsUnique(_email);
 

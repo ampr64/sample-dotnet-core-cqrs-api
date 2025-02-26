@@ -3,10 +3,7 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Domain.Customers.Orders
 {
-    public class OrderId : TypedIdValueBase
+    public class OrderId(Guid value) : TypedIdValueBase(value)
     {
-        public OrderId(Guid value) : base(value)
-        {
-        }
     }
 }

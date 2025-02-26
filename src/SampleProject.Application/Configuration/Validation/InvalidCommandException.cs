@@ -2,12 +2,8 @@
 
 namespace SampleProject.Application.Configuration.Validation
 {
-    public class InvalidCommandException : Exception
+    public class InvalidCommandException(string message, string details) : Exception(message)
     {
-        public string Details { get; }
-        public InvalidCommandException(string message, string details) : base(message)
-        {
-            this.Details = details;
-        }
+        public string Details { get; } = details;
     }
 }
