@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SampleProject.Domain.ForeignExchange;
+﻿using SampleProject.Domain.ForeignExchange;
 
 namespace SampleProject.Infrastructure.Domain.ForeignExchanges;
 

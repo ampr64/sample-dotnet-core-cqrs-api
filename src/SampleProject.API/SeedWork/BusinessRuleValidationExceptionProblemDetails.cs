@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.API.SeedWork;
 
-public class BusinessRuleValidationExceptionProblemDetails : Microsoft.AspNetCore.Mvc.ProblemDetails
+public class BusinessRuleValidationExceptionProblemDetails : ProblemDetails
 {
     public BusinessRuleValidationExceptionProblemDetails(BusinessRuleValidationException exception)
     {

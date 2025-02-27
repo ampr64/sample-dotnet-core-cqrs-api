@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SampleProject.Application.Orders.ChangeCustomerOrder;

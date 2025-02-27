@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using NUnit.Framework;
 using SampleProject.Application.Customers.IntegrationHandlers;
 using SampleProject.Application.Customers.RegisterCustomer;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SampleProject.Domain.Customers.Orders;
+﻿using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.Customers.Orders.Events;
 using SampleProject.Domain.Customers.Rules;
 using SampleProject.Domain.ForeignExchange;

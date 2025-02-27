@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using SampleProject.Application.Configuration.Validation;
 
 namespace SampleProject.API.SeedWork;
 
-public class InvalidCommandProblemDetails : Microsoft.AspNetCore.Mvc.ProblemDetails
+public class InvalidCommandProblemDetails : ProblemDetails
 {
     public InvalidCommandProblemDetails(InvalidCommandException exception)
     {

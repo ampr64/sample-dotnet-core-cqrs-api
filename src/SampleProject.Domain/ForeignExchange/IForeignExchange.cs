@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SampleProject.Domain.ForeignExchange;
+﻿namespace SampleProject.Domain.ForeignExchange;
 
 public interface IForeignExchange
 {

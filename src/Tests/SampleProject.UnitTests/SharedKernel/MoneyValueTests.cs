@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SampleProject.Domain.SharedKernel;
 using SampleProject.UnitTests.SeedWork;
 

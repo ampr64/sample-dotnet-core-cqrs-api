@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
-namespace SampleProject.API.Configuration;
+﻿namespace SampleProject.API.Configuration;
 
 internal class CorrelationMiddleware(
     RequestDelegate next)

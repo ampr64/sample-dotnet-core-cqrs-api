@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Infrastructure.Processing.Outbox;
+﻿namespace SampleProject.Infrastructure.Processing.Outbox;
 
 public class OutboxMessage
 {

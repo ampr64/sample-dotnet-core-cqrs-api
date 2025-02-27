@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Infrastructure.Database;

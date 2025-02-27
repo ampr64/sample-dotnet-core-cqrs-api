@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SampleProject.Application.Orders;
+﻿using SampleProject.Application.Orders;
 
 namespace SampleProject.API.Orders;
 

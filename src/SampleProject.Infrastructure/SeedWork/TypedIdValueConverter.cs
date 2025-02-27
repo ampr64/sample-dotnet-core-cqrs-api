@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Infrastructure.SeedWork;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Domain.SharedKernel;
+﻿namespace SampleProject.Domain.SharedKernel;
 
 public static class SystemClock
 {

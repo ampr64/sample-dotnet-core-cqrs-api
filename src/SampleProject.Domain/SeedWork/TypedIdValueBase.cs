@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.SeedWork;
 
 public abstract class TypedIdValueBase : IEquatable<TypedIdValueBase>
 {

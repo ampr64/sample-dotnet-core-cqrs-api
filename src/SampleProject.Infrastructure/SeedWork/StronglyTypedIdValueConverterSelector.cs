@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SampleProject.Domain.SeedWork;
 

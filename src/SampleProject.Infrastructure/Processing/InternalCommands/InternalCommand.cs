@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Infrastructure.Processing.InternalCommands;
+﻿namespace SampleProject.Infrastructure.Processing.InternalCommands;
 
 public class InternalCommand
 {

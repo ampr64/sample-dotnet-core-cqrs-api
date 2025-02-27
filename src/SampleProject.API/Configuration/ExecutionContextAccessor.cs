@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using SampleProject.Application.Configuration;
+﻿using SampleProject.Application.Configuration;
 
 namespace SampleProject.API.Configuration;
 

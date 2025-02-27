@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure.Database;

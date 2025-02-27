@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.SeedWork;
 
 public class BusinessRuleValidationException(IBusinessRule brokenRule) : Exception(brokenRule.Message)
 {

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Linq;
-using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Hellang.Middleware.ProblemDetails;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SampleProject.API.Configuration;
 using SampleProject.Application.Configuration.Validation;
 using SampleProject.API.SeedWork;
@@ -19,6 +11,7 @@ using SampleProject.Infrastructure;
 using SampleProject.Infrastructure.Caching;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Serilog.Core;
 
 [assembly: UserSecretsId("54e8eb06-aaa1-4fff-9f05-3ced1cb623c2")]
 namespace SampleProject.API;
@@ -98,7 +91,7 @@ public class Startup
         app.UseSwaggerDocumentation();
     }
 
-    private static ILogger ConfigureLogger()
+    private static Logger ConfigureLogger()
     {
         return new LoggerConfiguration()
             .Enrich.FromLogContext()

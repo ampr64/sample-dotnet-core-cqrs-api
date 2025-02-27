@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SampleProject.Domain.Products;
+﻿namespace SampleProject.Domain.Products;
 
 public interface IProductRepository
 {

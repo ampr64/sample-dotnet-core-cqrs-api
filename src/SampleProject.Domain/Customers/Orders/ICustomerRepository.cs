@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SampleProject.Domain.Customers.Orders;
+﻿namespace SampleProject.Domain.Customers.Orders;
 
 public interface ICustomerRepository
 {

@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using SampleProject.Domain.SeedWork;
+﻿using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure.Database;
 using SampleProject.Infrastructure.Processing;
 

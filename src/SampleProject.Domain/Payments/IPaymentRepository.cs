@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SampleProject.Domain.Payments;
+﻿namespace SampleProject.Domain.Payments;
 
 public interface IPaymentRepository
 {

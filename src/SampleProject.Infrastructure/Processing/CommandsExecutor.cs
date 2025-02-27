@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using MediatR;
 using SampleProject.Application.Configuration.Commands;
 

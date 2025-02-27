@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SampleProject.Application.Customers.GetCustomerDetails;
 using SampleProject.Application.Customers.IntegrationHandlers;

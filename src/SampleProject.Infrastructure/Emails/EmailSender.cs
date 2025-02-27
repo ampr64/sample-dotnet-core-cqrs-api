@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using SampleProject.Application.Configuration.Emails;
+﻿using SampleProject.Application.Configuration.Emails;
 
 namespace SampleProject.Infrastructure.Emails;
 
@@ -9,6 +8,6 @@ public class EmailSender : IEmailSender
     {
         // Integration with email service.
 
-        return;
+        await Task.CompletedTask;
     }
 }

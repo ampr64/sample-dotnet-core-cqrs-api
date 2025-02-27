@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using Newtonsoft.Json;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;

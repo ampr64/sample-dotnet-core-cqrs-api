@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
 
 namespace SampleProject.API.Configuration;
 

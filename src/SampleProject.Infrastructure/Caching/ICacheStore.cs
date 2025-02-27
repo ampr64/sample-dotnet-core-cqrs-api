@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SampleProject.Infrastructure.Caching;
+﻿namespace SampleProject.Infrastructure.Caching;
 
 public interface ICacheStore
 {

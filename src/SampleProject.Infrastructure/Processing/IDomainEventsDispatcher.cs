@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace SampleProject.Infrastructure.Processing;
+﻿namespace SampleProject.Infrastructure.Processing;
 
 public interface IDomainEventsDispatcher
 {

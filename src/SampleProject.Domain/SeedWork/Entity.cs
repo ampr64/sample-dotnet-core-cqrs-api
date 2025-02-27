@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.SeedWork;
 
 /// <summary>
 /// Base class for entities.
