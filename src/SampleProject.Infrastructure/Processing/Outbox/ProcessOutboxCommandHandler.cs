@@ -11,63 +11,62 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SampleProject.Infrastructure.Processing.Outbox
+namespace SampleProject.Infrastructure.Processing.Outbox;
+
+internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessOutboxCommand, Unit>
 {
-    internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessOutboxCommand, Unit>
+    private readonly IMediator _mediator = mediator;
+
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+
+    public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
     {
-        private readonly IMediator _mediator = mediator;
+        var connection = this._sqlConnectionFactory.GetOpenConnection();
+        const string sql = "SELECT " +
+                           "[OutboxMessage].[Id], " +
+                           "[OutboxMessage].[Type], " +
+                           "[OutboxMessage].[Data] " +
+                           "FROM [app].[OutboxMessages] AS [OutboxMessage] " +
+                           "WHERE [OutboxMessage].[ProcessedDate] IS NULL";
 
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+        var messages = await connection.QueryAsync<OutboxMessageDto>(sql);
+        var messagesList = messages.AsList();
 
-        public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
+        const string sqlUpdateProcessedDate = "UPDATE [app].[OutboxMessages] " +
+                                              "SET [ProcessedDate] = @Date " +
+                                              "WHERE [Id] = @Id";
+        if (messagesList.Count > 0)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
-            const string sql = "SELECT " +
-                               "[OutboxMessage].[Id], " +
-                               "[OutboxMessage].[Type], " +
-                               "[OutboxMessage].[Data] " +
-                               "FROM [app].[OutboxMessages] AS [OutboxMessage] " +
-                               "WHERE [OutboxMessage].[ProcessedDate] IS NULL";
-
-            var messages = await connection.QueryAsync<OutboxMessageDto>(sql);
-            var messagesList = messages.AsList();
-
-            const string sqlUpdateProcessedDate = "UPDATE [app].[OutboxMessages] " +
-                                                  "SET [ProcessedDate] = @Date " +
-                                                  "WHERE [Id] = @Id";
-            if (messagesList.Count > 0)
+            foreach (var message in messagesList)
             {
-                foreach (var message in messagesList)
+                Type type = Assemblies.Application
+                    .GetType(message.Type);
+                var request = JsonConvert.DeserializeObject(message.Data, type) as IDomainEventNotification;
+
+                using (LogContext.Push(new OutboxMessageContextEnricher(request)))
                 {
-                    Type type = Assemblies.Application
-                        .GetType(message.Type);
-                    var request = JsonConvert.DeserializeObject(message.Data, type) as IDomainEventNotification;
+                    await this._mediator.Publish(request, cancellationToken);
 
-                    using (LogContext.Push(new OutboxMessageContextEnricher(request)))
+                    await connection.ExecuteAsync(sqlUpdateProcessedDate, new
                     {
-                        await this._mediator.Publish(request, cancellationToken);
-
-                        await connection.ExecuteAsync(sqlUpdateProcessedDate, new
-                        {
-                            Date = DateTime.UtcNow,
-                            message.Id
-                        });
-                    }
-
+                        Date = DateTime.UtcNow,
+                        message.Id
+                    });
                 }
-            }
 
-            return Unit.Value;
+            }
         }
 
-        private class OutboxMessageContextEnricher(IDomainEventNotification notification) : ILogEventEnricher
-        {
-            private readonly IDomainEventNotification _notification = notification;
+        return Unit.Value;
+    }
 
-            public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-            {
-                logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"OutboxMessage:{_notification.Id.ToString()}")));
-            }
+    private class OutboxMessageContextEnricher(IDomainEventNotification notification) : ILogEventEnricher
+    {
+        private readonly IDomainEventNotification _notification = notification;
+
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+        {
+            logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"OutboxMessage:{_notification.Id.ToString()}")));
         }
     }
 }

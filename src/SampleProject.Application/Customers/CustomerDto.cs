@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SampleProject.Application.Customers
+namespace SampleProject.Application.Customers;
+
+public class CustomerDto
 {
-    public class CustomerDto
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

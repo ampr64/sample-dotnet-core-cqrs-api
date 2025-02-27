@@ -4,21 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using SampleProject.Domain.Payments;
 using SampleProject.Infrastructure.Database;
 
-namespace SampleProject.Infrastructure.Domain.Payments
+namespace SampleProject.Infrastructure.Domain.Payments;
+
+public class PaymentRepository(OrdersContext context) : IPaymentRepository
 {
-    public class PaymentRepository(OrdersContext context) : IPaymentRepository
+    private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
+
+    public async Task<Payment> GetByIdAsync(PaymentId id)
     {
-        private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
+        return await this._context.Payments
+            .SingleAsync(x => x.Id == id);
+    }
 
-        public async Task<Payment> GetByIdAsync(PaymentId id)
-        {
-            return await this._context.Payments
-                .SingleAsync(x => x.Id == id);
-        }
-
-        public async Task AddAsync(Payment payment)
-        {
-            await this._context.Payments.AddAsync(payment);
-        }
+    public async Task AddAsync(Payment payment)
+    {
+        await this._context.Payments.AddAsync(payment);
     }
 }

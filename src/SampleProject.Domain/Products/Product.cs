@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Domain.Products
+namespace SampleProject.Domain.Products;
+
+public class Product : Entity, IAggregateRoot
 {
-    public class Product : Entity, IAggregateRoot
+    public ProductId Id { get; private set; }
+
+    public string Name { get; private set; }
+
+    private List<ProductPrice> _prices;
+
+    private Product()
     {
-        public ProductId Id { get; private set; }
 
-        public string Name { get; private set; }
-
-        private List<ProductPrice> _prices;
-
-        private Product()
-        {
-
-        }
     }
 }

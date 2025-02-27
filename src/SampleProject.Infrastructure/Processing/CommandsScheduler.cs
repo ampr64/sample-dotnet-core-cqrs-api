@@ -6,26 +6,25 @@ using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Processing;
 
-namespace SampleProject.Infrastructure.Processing
+namespace SampleProject.Infrastructure.Processing;
+
+public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICommandsScheduler
 {
-    public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICommandsScheduler
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+
+    public async Task EnqueueAsync<T>(ICommand<T> command)
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+        var connection = this._sqlConnectionFactory.GetOpenConnection();
 
-        public async Task EnqueueAsync<T>(ICommand<T> command)
+        const string sqlInsert = "INSERT INTO [app].[InternalCommands] ([Id], [EnqueueDate] , [Type], [Data]) VALUES " +
+                                 "(@Id, @EnqueueDate, @Type, @Data)";
+
+        await connection.ExecuteAsync(sqlInsert, new
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
-
-            const string sqlInsert = "INSERT INTO [app].[InternalCommands] ([Id], [EnqueueDate] , [Type], [Data]) VALUES " +
-                                     "(@Id, @EnqueueDate, @Type, @Data)";
-
-            await connection.ExecuteAsync(sqlInsert, new
-            {
-                command.Id,
-                EnqueueDate = DateTime.UtcNow,
-                Type = command.GetType().FullName,
-                Data = JsonConvert.SerializeObject(command)
-            });
-        }
+            command.Id,
+            EnqueueDate = DateTime.UtcNow,
+            Type = command.GetType().FullName,
+            Data = JsonConvert.SerializeObject(command)
+        });
     }
 }

@@ -3,25 +3,24 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using SampleProject.Application.Configuration;
 
-namespace SampleProject.API.Configuration
+namespace SampleProject.API.Configuration;
+
+public class ExecutionContextAccessor(IHttpContextAccessor httpContextAccessor) : IExecutionContextAccessor
 {
-    public class ExecutionContextAccessor(IHttpContextAccessor httpContextAccessor) : IExecutionContextAccessor
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+    public Guid CorrelationId
     {
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-
-        public Guid CorrelationId
+        get
         {
-            get
+            if (IsAvailable && _httpContextAccessor.HttpContext.Request.Headers.Keys.Any(x => x == CorrelationMiddleware.CorrelationHeaderKey))
             {
-                if (IsAvailable && _httpContextAccessor.HttpContext.Request.Headers.Keys.Any(x => x == CorrelationMiddleware.CorrelationHeaderKey))
-                {
-                    return Guid.Parse(
-                        _httpContextAccessor.HttpContext.Request.Headers[CorrelationMiddleware.CorrelationHeaderKey]);
-                }
-                throw new ApplicationException("Http context and correlation id is not available");
+                return Guid.Parse(
+                    _httpContextAccessor.HttpContext.Request.Headers[CorrelationMiddleware.CorrelationHeaderKey]);
             }
+            throw new ApplicationException("Http context and correlation id is not available");
         }
-
-        public bool IsAvailable => _httpContextAccessor.HttpContext != null;
     }
+
+    public bool IsAvailable => _httpContextAccessor.HttpContext != null;
 }

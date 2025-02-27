@@ -6,36 +6,35 @@ using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure.Database;
 
-namespace SampleProject.Infrastructure.Processing
+namespace SampleProject.Infrastructure.Processing;
+
+public class UnitOfWorkCommandHandlerDecorator<T>(
+    ICommandHandler<T> decorated,
+    IUnitOfWork unitOfWork,
+    OrdersContext ordersContext) : ICommandHandler<T> where T:ICommand
 {
-    public class UnitOfWorkCommandHandlerDecorator<T>(
-        ICommandHandler<T> decorated,
-        IUnitOfWork unitOfWork,
-        OrdersContext ordersContext) : ICommandHandler<T> where T:ICommand
+    private readonly ICommandHandler<T> _decorated = decorated;
+
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
+    private readonly OrdersContext _ordersContext = ordersContext;
+
+    public async Task Handle(T command, CancellationToken cancellationToken)
     {
-        private readonly ICommandHandler<T> _decorated = decorated;
+        await this._decorated.Handle(command, cancellationToken);
 
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
-        private readonly OrdersContext _ordersContext = ordersContext;
-
-        public async Task Handle(T command, CancellationToken cancellationToken)
+        if (command is InternalCommandBase)
         {
-            await this._decorated.Handle(command, cancellationToken);
+            var internalCommand =
+                await _ordersContext.InternalCommands.FirstOrDefaultAsync(x => x.Id == command.Id,
+                    cancellationToken: cancellationToken);
 
-            if (command is InternalCommandBase)
+            if (internalCommand != null)
             {
-                var internalCommand =
-                    await _ordersContext.InternalCommands.FirstOrDefaultAsync(x => x.Id == command.Id,
-                        cancellationToken: cancellationToken);
-
-                if (internalCommand != null)
-                {
-                    internalCommand.ProcessedDate = DateTime.UtcNow;
-                }
+                internalCommand.ProcessedDate = DateTime.UtcNow;
             }
-
-            await this._unitOfWork.CommitAsync(cancellationToken);
         }
+
+        await this._unitOfWork.CommitAsync(cancellationToken);
     }
 }

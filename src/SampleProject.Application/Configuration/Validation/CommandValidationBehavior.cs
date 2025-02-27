@@ -6,35 +6,34 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 
-namespace SampleProject.Application.Configuration.Validation
+namespace SampleProject.Application.Configuration.Validation;
+
+public class CommandValidationBehavior<TRequest, TResponse>(IList<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
 {
-    public class CommandValidationBehavior<TRequest, TResponse>(IList<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+    private readonly IList<IValidator<TRequest>> _validators = validators;
+
+    public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        private readonly IList<IValidator<TRequest>> _validators = validators;
+        var errors = _validators
+        .Select(v => v.Validate(request))
+        .SelectMany(result => result.Errors)
+        .Where(error => error != null)
+        .ToList();
 
-        public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        if (errors.Any())
         {
-            var errors = _validators
-            .Select(v => v.Validate(request))
-            .SelectMany(result => result.Errors)
-            .Where(error => error != null)
-            .ToList();
+            var errorBuilder = new StringBuilder();
 
-            if (errors.Any())
+            errorBuilder.AppendLine("Invalid command, reason: ");
+
+            foreach (var error in errors)
             {
-                var errorBuilder = new StringBuilder();
-
-                errorBuilder.AppendLine("Invalid command, reason: ");
-
-                foreach (var error in errors)
-                {
-                    errorBuilder.AppendLine(error.ErrorMessage);
-                }
-
-                throw new InvalidCommandException(errorBuilder.ToString(), null);
+                errorBuilder.AppendLine(error.ErrorMessage);
             }
 
-            return next();
+            throw new InvalidCommandException(errorBuilder.ToString(), null);
         }
+
+        return next();
     }
 }

@@ -9,40 +9,39 @@ using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.ForeignExchange;
 using SampleProject.Domain.Products;
 
-namespace SampleProject.Application.Orders.PlaceCustomerOrder
+namespace SampleProject.Application.Orders.PlaceCustomerOrder;
+
+public class PlaceCustomerOrderCommandHandler(
+    ICustomerRepository customerRepository,
+    IForeignExchange foreignExchange,
+    ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<PlaceCustomerOrderCommand, Guid>
 {
-    public class PlaceCustomerOrderCommandHandler(
-        ICustomerRepository customerRepository,
-        IForeignExchange foreignExchange,
-        ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<PlaceCustomerOrderCommand, Guid>
+    private readonly ICustomerRepository _customerRepository = customerRepository;
+    
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+    
+    private readonly IForeignExchange _foreignExchange = foreignExchange;
+
+    public async Task<Guid> Handle(PlaceCustomerOrderCommand command, CancellationToken cancellationToken)
     {
-        private readonly ICustomerRepository _customerRepository = customerRepository;
+        var customer = await this._customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
+
+        var allProductPrices =
+            await ProductPriceProvider.GetAllProductPrices(_sqlConnectionFactory.GetOpenConnection());
+
+        var conversionRates = this._foreignExchange.GetConversionRates();
+
+        var orderProductsData = command
+            .Products
+            .Select(x => new OrderProductData(new ProductId(x.Id), x.Quantity))
+            .ToList();          
         
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
-        
-        private readonly IForeignExchange _foreignExchange = foreignExchange;
+        var orderId = customer.PlaceOrder(
+            orderProductsData,
+            allProductPrices,
+            command.Currency,
+            conversionRates);
 
-        public async Task<Guid> Handle(PlaceCustomerOrderCommand command, CancellationToken cancellationToken)
-        {
-            var customer = await this._customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
-
-            var allProductPrices =
-                await ProductPriceProvider.GetAllProductPrices(_sqlConnectionFactory.GetOpenConnection());
-
-            var conversionRates = this._foreignExchange.GetConversionRates();
-
-            var orderProductsData = command
-                .Products
-                .Select(x => new OrderProductData(new ProductId(x.Id), x.Quantity))
-                .ToList();          
-            
-            var orderId = customer.PlaceOrder(
-                orderProductsData,
-                allProductPrices,
-                command.Currency,
-                conversionRates);
-
-            return orderId.Value;
-        }
+        return orderId.Value;
     }
 }

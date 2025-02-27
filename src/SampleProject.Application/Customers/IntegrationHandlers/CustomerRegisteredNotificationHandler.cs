@@ -4,20 +4,19 @@ using System.Threading.Tasks;
 using MediatR;
 using SampleProject.Application.Configuration.Processing;
 
-namespace SampleProject.Application.Customers.IntegrationHandlers
+namespace SampleProject.Application.Customers.IntegrationHandlers;
+
+public class CustomerRegisteredNotificationHandler(
+    ICommandsScheduler commandsScheduler) : INotificationHandler<CustomerRegisteredNotification>
 {
-    public class CustomerRegisteredNotificationHandler(
-        ICommandsScheduler commandsScheduler) : INotificationHandler<CustomerRegisteredNotification>
+    private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
+
+    public async Task Handle(CustomerRegisteredNotification notification, CancellationToken cancellationToken)
     {
-        private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
+        // Send welcome e-mail message...
 
-        public async Task Handle(CustomerRegisteredNotification notification, CancellationToken cancellationToken)
-        {
-            // Send welcome e-mail message...
-
-            await this._commandsScheduler.EnqueueAsync(new MarkCustomerAsWelcomedCommand(
-                Guid.NewGuid(),
-                notification.CustomerId));
-        }
+        await this._commandsScheduler.EnqueueAsync(new MarkCustomerAsWelcomedCommand(
+            Guid.NewGuid(),
+            notification.CustomerId));
     }
 }

@@ -5,16 +5,15 @@ using MediatR;
 using SampleProject.Application.Configuration.Processing;
 using SampleProject.Application.Payments.SendEmailAfterPayment;
 
-namespace SampleProject.Application.Payments
-{
-    public class PaymentCreatedNotificationHandler(ICommandsScheduler commandsScheduler) : INotificationHandler<PaymentCreatedNotification>
-    {
-        private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
+namespace SampleProject.Application.Payments;
 
-        public async Task Handle(PaymentCreatedNotification request, CancellationToken cancellationToken)
-        {
-            await _commandsScheduler.EnqueueAsync(
-                new SendEmailAfterPaymentCommand(Guid.NewGuid(), request.PaymentId));
-        }
+public class PaymentCreatedNotificationHandler(ICommandsScheduler commandsScheduler) : INotificationHandler<PaymentCreatedNotification>
+{
+    private readonly ICommandsScheduler _commandsScheduler = commandsScheduler;
+
+    public async Task Handle(PaymentCreatedNotification request, CancellationToken cancellationToken)
+    {
+        await _commandsScheduler.EnqueueAsync(
+            new SendEmailAfterPaymentCommand(Guid.NewGuid(), request.PaymentId));
     }
 }

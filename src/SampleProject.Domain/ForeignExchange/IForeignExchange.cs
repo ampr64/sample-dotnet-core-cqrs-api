@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SampleProject.Domain.ForeignExchange
+namespace SampleProject.Domain.ForeignExchange;
+
+public interface IForeignExchange
 {
-    public interface IForeignExchange
-    {
-        List<ConversionRate> GetConversionRates();
-    }
+    List<ConversionRate> GetConversionRates();
 }

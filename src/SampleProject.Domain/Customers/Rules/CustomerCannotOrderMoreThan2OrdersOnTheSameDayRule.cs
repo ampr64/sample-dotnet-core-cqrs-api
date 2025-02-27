@@ -3,17 +3,16 @@ using System.Linq;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Domain.Customers.Rules
+namespace SampleProject.Domain.Customers.Rules;
+
+public class CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(IList<Order> orders) : IBusinessRule
 {
-    public class CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(IList<Order> orders) : IBusinessRule
+    private readonly IList<Order> _orders = orders;
+
+    public bool IsBroken()
     {
-        private readonly IList<Order> _orders = orders;
-
-        public bool IsBroken()
-        {
-           return _orders.Count(x => x.IsOrderedToday()) >= 2;
-        }
-
-        public string Message => "You cannot order more than 2 orders on the same day.";
+       return _orders.Count(x => x.IsOrderedToday()) >= 2;
     }
+
+    public string Message => "You cannot order more than 2 orders on the same day.";
 }

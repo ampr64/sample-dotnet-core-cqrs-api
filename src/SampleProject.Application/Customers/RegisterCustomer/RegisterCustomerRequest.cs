@@ -1,9 +1,8 @@
-﻿namespace SampleProject.Application.Customers.RegisterCustomer
-{
-    public class RegisterCustomerRequest
-    {
-        public string Email { get; set; }
+﻿namespace SampleProject.Application.Customers.RegisterCustomer;
 
-        public string Name { get; set; }
-    }
+public class RegisterCustomerRequest
+{
+    public string Email { get; set; }
+
+    public string Name { get; set; }
 }

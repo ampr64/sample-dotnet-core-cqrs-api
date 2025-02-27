@@ -7,26 +7,25 @@ using SampleProject.Domain.Products;
 using SampleProject.Infrastructure.Database;
 using SampleProject.Infrastructure.SeedWork;
 
-namespace SampleProject.Infrastructure.Domain.Products
+namespace SampleProject.Infrastructure.Domain.Products;
+
+public class ProductRepository(OrdersContext context) : IProductRepository
 {
-    public class ProductRepository(OrdersContext context) : IProductRepository
+    private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
+
+    public async Task<List<Product>> GetByIdsAsync(List<ProductId> ids)
     {
-        private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
+        return await this._context
+            .Products
+            .IncludePaths("_prices")
+            .Where(x => ids.Contains(x.Id)).ToListAsync();
+    }
 
-        public async Task<List<Product>> GetByIdsAsync(List<ProductId> ids)
-        {
-            return await this._context
-                .Products
-                .IncludePaths("_prices")
-                .Where(x => ids.Contains(x.Id)).ToListAsync();
-        }
-
-        public async Task<List<Product>> GetAllAsync()
-        {
-            return await this._context
-                .Products
-                .IncludePaths("_prices")
-                .ToListAsync();
-        }
+    public async Task<List<Product>> GetAllAsync()
+    {
+        return await this._context
+            .Products
+            .IncludePaths("_prices")
+            .ToListAsync();
     }
 }

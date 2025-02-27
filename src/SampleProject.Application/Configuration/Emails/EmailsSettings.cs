@@ -1,7 +1,6 @@
-﻿namespace SampleProject.Application.Configuration.Emails
+﻿namespace SampleProject.Application.Configuration.Emails;
+
+public class EmailsSettings
 {
-    public class EmailsSettings
-    {
-        public string FromAddressEmail { get; set; }
-    }
+    public string FromAddressEmail { get; set; }
 }

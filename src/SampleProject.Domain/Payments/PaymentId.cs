@@ -1,9 +1,8 @@
 ﻿using System;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Domain.Payments
+namespace SampleProject.Domain.Payments;
+
+public class PaymentId(Guid value) : TypedIdValueBase(value)
 {
-    public class PaymentId(Guid value) : TypedIdValueBase(value)
-    {
-    }
 }

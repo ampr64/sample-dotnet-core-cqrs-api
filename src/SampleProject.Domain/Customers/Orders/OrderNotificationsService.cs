@@ -1,10 +1,9 @@
-﻿namespace SampleProject.Domain.Customers.Orders
+﻿namespace SampleProject.Domain.Customers.Orders;
+
+public static class OrderNotificationsService
 {
-    public static class OrderNotificationsService
+    public static string GetOrderEmailConfirmationDescription(OrderId orderId)
     {
-        public static string GetOrderEmailConfirmationDescription(OrderId orderId)
-        {
-            return $"Order number: {orderId.Value} placed";
-        }
+        return $"Order number: {orderId.Value} placed";
     }
 }

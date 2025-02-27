@@ -1,7 +1,6 @@
-﻿namespace SampleProject.Domain.Customers
+﻿namespace SampleProject.Domain.Customers;
+
+public interface ICustomerUniquenessChecker
 {
-    public interface ICustomerUniquenessChecker
-    {
-        bool IsUnique(string customerEmail);
-    }
+    bool IsUnique(string customerEmail);
 }

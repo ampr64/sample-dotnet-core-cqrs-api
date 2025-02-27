@@ -4,28 +4,27 @@ using Dapper;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Queries;
 
-namespace SampleProject.Application.Customers.GetCustomerDetails
+namespace SampleProject.Application.Customers.GetCustomerDetails;
+
+public class GetCustomerDetailsQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetCustomerDetailsQuery, CustomerDetailsDto>
 {
-    public class GetCustomerDetailsQueryHandler(ISqlConnectionFactory sqlConnectionFactory) : IQueryHandler<GetCustomerDetailsQuery, CustomerDetailsDto>
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+
+    public Task<CustomerDetailsDto> Handle(GetCustomerDetailsQuery request, CancellationToken cancellationToken)
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+        const string sql = "SELECT " +
+                           "[Customer].[Id], " +
+                           "[Customer].[Name], " +
+                           "[Customer].[Email], " +
+                           "[Customer].[WelcomeEmailWasSent] " +
+                           "FROM orders.v_Customers AS [Customer] " +
+                           "WHERE [Customer].[Id] = @CustomerId ";
 
-        public Task<CustomerDetailsDto> Handle(GetCustomerDetailsQuery request, CancellationToken cancellationToken)
+        var connection = _sqlConnectionFactory.GetOpenConnection();
+
+        return connection.QuerySingleAsync<CustomerDetailsDto>(sql, new
         {
-            const string sql = "SELECT " +
-                               "[Customer].[Id], " +
-                               "[Customer].[Name], " +
-                               "[Customer].[Email], " +
-                               "[Customer].[WelcomeEmailWasSent] " +
-                               "FROM orders.v_Customers AS [Customer] " +
-                               "WHERE [Customer].[Id] = @CustomerId ";
-
-            var connection = _sqlConnectionFactory.GetOpenConnection();
-
-            return connection.QuerySingleAsync<CustomerDetailsDto>(sql, new
-            {
-                request.CustomerId
-            });
-        }
+            request.CustomerId
+        });
     }
 }

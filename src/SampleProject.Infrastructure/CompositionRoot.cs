@@ -1,19 +1,18 @@
 ﻿using Autofac;
 
-namespace SampleProject.Infrastructure
+namespace SampleProject.Infrastructure;
+
+public static class CompositionRoot
 {
-    public static class CompositionRoot
+    private static IContainer _container;
+
+    public static void SetContainer(IContainer container)
     {
-        private static IContainer _container;
+        _container = container;
+    }
 
-        public static void SetContainer(IContainer container)
-        {
-            _container = container;
-        }
-
-        internal static ILifetimeScope BeginLifetimeScope()
-        {
-            return _container.BeginLifetimeScope();
-        }
+    internal static ILifetimeScope BeginLifetimeScope()
+    {
+        return _container.BeginLifetimeScope();
     }
 }

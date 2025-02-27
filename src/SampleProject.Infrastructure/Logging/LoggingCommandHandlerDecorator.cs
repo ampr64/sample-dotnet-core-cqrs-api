@@ -9,72 +9,71 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace SampleProject.Infrastructure.Logging
+namespace SampleProject.Infrastructure.Logging;
+
+internal class LoggingCommandHandlerDecorator<T>(
+    ILogger logger,
+    IExecutionContextAccessor executionContextAccessor,
+    ICommandHandler<T> decorated) : ICommandHandler<T> where T : ICommand
 {
-    internal class LoggingCommandHandlerDecorator<T>(
-        ILogger logger,
-        IExecutionContextAccessor executionContextAccessor,
-        ICommandHandler<T> decorated) : ICommandHandler<T> where T : ICommand
+    private readonly ILogger _logger = logger;
+
+    private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
+
+    private readonly ICommandHandler<T> _decorated = decorated;
+
+    public async Task Handle(T command, CancellationToken cancellationToken)
     {
-        private readonly ILogger _logger = logger;
-
-        private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
-
-        private readonly ICommandHandler<T> _decorated = decorated;
-
-        public async Task Handle(T command, CancellationToken cancellationToken)
+        if (command is IRecurringCommand)
         {
-            if (command is IRecurringCommand)
+            await _decorated.Handle(command, cancellationToken);
+            return;
+        }
+
+        using (
+            LogContext.Push(
+                new RequestLogEnricher(_executionContextAccessor),
+                new CommandLogEnricher(command)))
+        {
+            try
             {
+                this._logger.Information(
+                    "Executing command {Command}",
+                    command.GetType().Name);
+
                 await _decorated.Handle(command, cancellationToken);
+
+                this._logger.Information("Command {Command} processed successful", command.GetType().Name);
+
                 return;
             }
-
-            using (
-                LogContext.Push(
-                    new RequestLogEnricher(_executionContextAccessor),
-                    new CommandLogEnricher(command)))
+            catch (Exception exception)
             {
-                try
-                {
-                    this._logger.Information(
-                        "Executing command {Command}",
-                        command.GetType().Name);
-
-                    await _decorated.Handle(command, cancellationToken);
-
-                    this._logger.Information("Command {Command} processed successful", command.GetType().Name);
-
-                    return;
-                }
-                catch (Exception exception)
-                {
-                    this._logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
-                    throw;
-                }
+                this._logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
+                throw;
             }
         }
+    }
 
-        private class CommandLogEnricher(ICommand command) : ILogEventEnricher
+    private class CommandLogEnricher(ICommand command) : ILogEventEnricher
+    {
+        private readonly ICommand _command = command;
+
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
-            private readonly ICommand _command = command;
-
-            public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-            {
-                logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"Command:{_command.Id.ToString()}")));
-            }
+            logEvent.AddOrUpdateProperty(new LogEventProperty("Context", new ScalarValue($"Command:{_command.Id.ToString()}")));
         }
+    }
 
-        private class RequestLogEnricher(IExecutionContextAccessor executionContextAccessor) : ILogEventEnricher
+    private class RequestLogEnricher(IExecutionContextAccessor executionContextAccessor) : ILogEventEnricher
+    {
+        private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
+
+        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
-            private readonly IExecutionContextAccessor _executionContextAccessor = executionContextAccessor;
-
-            public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+            if (_executionContextAccessor.IsAvailable)
             {
-                if (_executionContextAccessor.IsAvailable)
-                {
-                    logEvent.AddOrUpdateProperty(new LogEventProperty("CorrelationId", new ScalarValue(_executionContextAccessor.CorrelationId)));
-                }
+                logEvent.AddOrUpdateProperty(new LogEventProperty("CorrelationId", new ScalarValue(_executionContextAccessor.CorrelationId)));
             }
         }
     }

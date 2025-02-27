@@ -1,7 +1,6 @@
-﻿namespace SampleProject.Domain.SeedWork
+﻿namespace SampleProject.Domain.SeedWork;
+
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-        
-    }
+    
 }

@@ -1,17 +1,16 @@
 ﻿using SampleProject.Domain.SeedWork;
 using SampleProject.Domain.SharedKernel;
 
-namespace SampleProject.Domain.Customers.Orders.Events
+namespace SampleProject.Domain.Customers.Orders.Events;
+
+public class OrderPlacedEvent(
+    OrderId orderId,
+    CustomerId customerId,
+    MoneyValue value) : DomainEventBase
 {
-    public class OrderPlacedEvent(
-        OrderId orderId,
-        CustomerId customerId,
-        MoneyValue value) : DomainEventBase
-    {
-        public OrderId OrderId { get; } = orderId;
+    public OrderId OrderId { get; } = orderId;
 
-        public CustomerId CustomerId { get; } = customerId;
+    public CustomerId CustomerId { get; } = customerId;
 
-        public MoneyValue Value { get; } = value;
-    }
+    public MoneyValue Value { get; } = value;
 }

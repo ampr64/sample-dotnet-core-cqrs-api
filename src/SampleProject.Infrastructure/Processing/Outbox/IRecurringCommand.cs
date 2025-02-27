@@ -1,7 +1,6 @@
-﻿namespace SampleProject.Infrastructure.Processing.Outbox
-{
-    public interface IRecurringCommand
-    {
+﻿namespace SampleProject.Infrastructure.Processing.Outbox;
 
-    }
+public interface IRecurringCommand
+{
+
 }

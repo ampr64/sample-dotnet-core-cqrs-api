@@ -7,42 +7,41 @@ using Newtonsoft.Json;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 
-namespace SampleProject.Infrastructure.Processing.InternalCommands
+namespace SampleProject.Infrastructure.Processing.InternalCommands;
+
+internal class ProcessInternalCommandsCommandHandler(
+    ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessInternalCommandsCommand, Unit>
 {
-    internal class ProcessInternalCommandsCommandHandler(
-        ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessInternalCommandsCommand, Unit>
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+
+    public async Task<Unit> Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+        var connection = this._sqlConnectionFactory.GetOpenConnection();
 
-        public async Task<Unit> Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
+        const string sql = "SELECT " +
+                           "[Command].[Type], " +
+                           "[Command].[Data] " +
+                           "FROM [app].[InternalCommands] AS [Command] " +
+                           "WHERE [Command].[ProcessedDate] IS NULL";
+        var commands = await connection.QueryAsync<InternalCommandDto>(sql);
+
+        var internalCommandsList = commands.AsList();
+
+        foreach (var internalCommand in internalCommandsList)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
+            Type type = Assemblies.Application.GetType(internalCommand.Type);
+            dynamic commandToProcess = JsonConvert.DeserializeObject(internalCommand.Data, type);
 
-            const string sql = "SELECT " +
-                               "[Command].[Type], " +
-                               "[Command].[Data] " +
-                               "FROM [app].[InternalCommands] AS [Command] " +
-                               "WHERE [Command].[ProcessedDate] IS NULL";
-            var commands = await connection.QueryAsync<InternalCommandDto>(sql);
-
-            var internalCommandsList = commands.AsList();
-
-            foreach (var internalCommand in internalCommandsList)
-            {
-                Type type = Assemblies.Application.GetType(internalCommand.Type);
-                dynamic commandToProcess = JsonConvert.DeserializeObject(internalCommand.Data, type);
-
-                await CommandsExecutor.Execute(commandToProcess);
-            }
-
-            return Unit.Value;
+            await CommandsExecutor.Execute(commandToProcess);
         }
 
-        private class InternalCommandDto
-        {
-            public string Type { get; set; }
+        return Unit.Value;
+    }
 
-            public string Data { get; set; }
-        }
+    private class InternalCommandDto
+    {
+        public string Type { get; set; }
+
+        public string Data { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace SampleProject.Domain.Payments
-{
-    public interface IPaymentRepository
-    {
-        Task<Payment> GetByIdAsync(PaymentId id);
+namespace SampleProject.Domain.Payments;
 
-        Task AddAsync(Payment payment);
-    }
+public interface IPaymentRepository
+{
+    Task<Payment> GetByIdAsync(PaymentId id);
+
+    Task AddAsync(Payment payment);
 }

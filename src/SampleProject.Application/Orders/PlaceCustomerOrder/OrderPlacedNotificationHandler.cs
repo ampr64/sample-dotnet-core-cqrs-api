@@ -6,37 +6,36 @@ using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Emails;
 using SampleProject.Domain.Customers.Orders;
 
-namespace SampleProject.Application.Orders.PlaceCustomerOrder
+namespace SampleProject.Application.Orders.PlaceCustomerOrder;
+
+public class OrderPlacedNotificationHandler(
+    IEmailSender emailSender,
+    EmailsSettings emailsSettings,
+    ISqlConnectionFactory sqlConnectionFactory) : INotificationHandler<OrderPlacedNotification>
 {
-    public class OrderPlacedNotificationHandler(
-        IEmailSender emailSender,
-        EmailsSettings emailsSettings,
-        ISqlConnectionFactory sqlConnectionFactory) : INotificationHandler<OrderPlacedNotification>
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly EmailsSettings _emailsSettings = emailsSettings;
+    private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+
+    public async Task Handle(OrderPlacedNotification request, CancellationToken cancellationToken)
     {
-        private readonly IEmailSender _emailSender = emailSender;
-        private readonly EmailsSettings _emailsSettings = emailsSettings;
-        private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
+        var connection = _sqlConnectionFactory.GetOpenConnection();
 
-        public async Task Handle(OrderPlacedNotification request, CancellationToken cancellationToken)
-        {
-            var connection = _sqlConnectionFactory.GetOpenConnection();
+        const string sql = "SELECT [Customer].[Email] " +
+                           "FROM orders.v_Customers AS [Customer] " +
+                           "WHERE [Customer].[Id] = @Id";
 
-            const string sql = "SELECT [Customer].[Email] " +
-                               "FROM orders.v_Customers AS [Customer] " +
-                               "WHERE [Customer].[Id] = @Id";
+        var customerEmail = await connection.QueryFirstAsync<string>(sql, 
+            new
+            {
+                Id = request.CustomerId.Value
+            });
 
-            var customerEmail = await connection.QueryFirstAsync<string>(sql, 
-                new
-                {
-                    Id = request.CustomerId.Value
-                });
-
-            var emailMessage = new EmailMessage(
-                _emailsSettings.FromAddressEmail, 
-                customerEmail, 
-                OrderNotificationsService.GetOrderEmailConfirmationDescription(request.OrderId));
-            
-            await _emailSender.SendEmailAsync(emailMessage);
-        }
+        var emailMessage = new EmailMessage(
+            _emailsSettings.FromAddressEmail, 
+            customerEmail, 
+            OrderNotificationsService.GetOrderEmailConfirmationDescription(request.OrderId));
+        
+        await _emailSender.SendEmailAsync(emailMessage);
     }
 }

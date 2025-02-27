@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SampleProject.Application.Configuration.Queries
-{
-    public interface IQuery<out TResult> : IRequest<TResult>
-    {
+namespace SampleProject.Application.Configuration.Queries;
 
-    }
+public interface IQuery<out TResult> : IRequest<TResult>
+{
+
 }

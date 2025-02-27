@@ -12,53 +12,52 @@ using SampleProject.Infrastructure.Domain.Payments;
 using SampleProject.Infrastructure.Domain.Products;
 using SampleProject.Infrastructure.SeedWork;
 
-namespace SampleProject.Infrastructure.Database
+namespace SampleProject.Infrastructure.Database;
+
+public class DataAccessModule(string databaseConnectionString) : Autofac.Module
 {
-    public class DataAccessModule(string databaseConnectionString) : Autofac.Module
+    private readonly string _databaseConnectionString = databaseConnectionString;
+
+    protected override void Load(ContainerBuilder builder)
     {
-        private readonly string _databaseConnectionString = databaseConnectionString;
+        builder.RegisterType<SqlConnectionFactory>()
+            .As<ISqlConnectionFactory>()
+            .WithParameter("connectionString", _databaseConnectionString)
+            .InstancePerLifetimeScope();
 
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<SqlConnectionFactory>()
-                .As<ISqlConnectionFactory>()
-                .WithParameter("connectionString", _databaseConnectionString)
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<UnitOfWork>()
-                .As<IUnitOfWork>()
-                .InstancePerLifetimeScope();
+        builder.RegisterType<UnitOfWork>()
+            .As<IUnitOfWork>()
+            .InstancePerLifetimeScope();
 
 
-            builder.RegisterType<CustomerRepository>()
-                .As<ICustomerRepository>()
-                .InstancePerLifetimeScope();
+        builder.RegisterType<CustomerRepository>()
+            .As<ICustomerRepository>()
+            .InstancePerLifetimeScope();
 
-            builder.RegisterType<ProductRepository>()
-                .As<IProductRepository>()
-                .InstancePerLifetimeScope();
+        builder.RegisterType<ProductRepository>()
+            .As<IProductRepository>()
+            .InstancePerLifetimeScope();
 
-            builder.RegisterType<PaymentRepository>()
-                .As<IPaymentRepository>()
-                .InstancePerLifetimeScope();
+        builder.RegisterType<PaymentRepository>()
+            .As<IPaymentRepository>()
+            .InstancePerLifetimeScope();
 
-            builder.RegisterType<StronglyTypedIdValueConverterSelector>()
-                .As<IValueConverterSelector>()
-                .SingleInstance();
+        builder.RegisterType<StronglyTypedIdValueConverterSelector>()
+            .As<IValueConverterSelector>()
+            .SingleInstance();
 
-            builder
-                .Register(c =>
-                {
-                    var dbContextOptionsBuilder = new DbContextOptionsBuilder<OrdersContext>();
-                    dbContextOptionsBuilder.UseSqlServer(_databaseConnectionString);
-                    dbContextOptionsBuilder
-                        .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
+        builder
+            .Register(c =>
+            {
+                var dbContextOptionsBuilder = new DbContextOptionsBuilder<OrdersContext>();
+                dbContextOptionsBuilder.UseSqlServer(_databaseConnectionString);
+                dbContextOptionsBuilder
+                    .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
 
-                    return new OrdersContext(dbContextOptionsBuilder.Options);
-                })
-                .AsSelf()
-                .As<DbContext>()
-                .InstancePerLifetimeScope();
-        }
+                return new OrdersContext(dbContextOptionsBuilder.Options);
+            })
+            .AsSelf()
+            .As<DbContext>()
+            .InstancePerLifetimeScope();
     }
 }

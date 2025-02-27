@@ -8,72 +8,71 @@ using SampleProject.Domain.Products;
 using SampleProject.Domain.SharedKernel;
 using SampleProject.Infrastructure.Database;
 
-namespace SampleProject.Infrastructure.Domain.Customers
+namespace SampleProject.Infrastructure.Domain.Customers;
+
+internal sealed class CustomerEntityTypeConfiguration : IEntityTypeConfiguration<Customer>
 {
-    internal sealed class CustomerEntityTypeConfiguration : IEntityTypeConfiguration<Customer>
+    internal const string OrdersList = "_orders";
+    internal const string OrderProducts = "_orderProducts";
+
+    public void Configure(EntityTypeBuilder<Customer> builder)
     {
-        internal const string OrdersList = "_orders";
-        internal const string OrderProducts = "_orderProducts";
+        builder.ToTable("Customers", SchemaNames.Orders);
+        
+        builder.HasKey(b => b.Id);
 
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        builder.Property("_welcomeEmailWasSent").HasColumnName("WelcomeEmailWasSent");
+        builder.Property("_email").HasColumnName("Email");
+        builder.Property("_name").HasColumnName("Name");
+        
+        builder.OwnsMany<Order>(OrdersList, x =>
         {
-            builder.ToTable("Customers", SchemaNames.Orders);
-            
-            builder.HasKey(b => b.Id);
+            x.WithOwner().HasForeignKey("CustomerId");
 
-            builder.Property("_welcomeEmailWasSent").HasColumnName("WelcomeEmailWasSent");
-            builder.Property("_email").HasColumnName("Email");
-            builder.Property("_name").HasColumnName("Name");
+            x.ToTable("Orders", SchemaNames.Orders);
             
-            builder.OwnsMany<Order>(OrdersList, x =>
+            x.Property<bool>("_isRemoved").HasColumnName("IsRemoved");
+            x.Property<DateTime>("_orderDate").HasColumnName("OrderDate");
+            x.Property<DateTime?>("_orderChangeDate").HasColumnName("OrderChangeDate");
+            x.Property<OrderId>("Id");
+            x.HasKey("Id");
+
+            x.Property("_status").HasColumnName("StatusId").HasConversion(new EnumToNumberConverter<OrderStatus, byte>());
+
+            x.OwnsMany<OrderProduct>(OrderProducts, y =>
             {
-                x.WithOwner().HasForeignKey("CustomerId");
+                y.WithOwner().HasForeignKey("OrderId");
 
-                x.ToTable("Orders", SchemaNames.Orders);
+                y.ToTable("OrderProducts", SchemaNames.Orders);
+                y.Property<OrderId>("OrderId");
+                y.Property<ProductId>("ProductId");
                 
-                x.Property<bool>("_isRemoved").HasColumnName("IsRemoved");
-                x.Property<DateTime>("_orderDate").HasColumnName("OrderDate");
-                x.Property<DateTime?>("_orderChangeDate").HasColumnName("OrderChangeDate");
-                x.Property<OrderId>("Id");
-                x.HasKey("Id");
+                y.HasKey("OrderId", "ProductId");
 
-                x.Property("_status").HasColumnName("StatusId").HasConversion(new EnumToNumberConverter<OrderStatus, byte>());
-
-                x.OwnsMany<OrderProduct>(OrderProducts, y =>
+                y.OwnsOne<MoneyValue>("Value", mv =>
                 {
-                    y.WithOwner().HasForeignKey("OrderId");
-
-                    y.ToTable("OrderProducts", SchemaNames.Orders);
-                    y.Property<OrderId>("OrderId");
-                    y.Property<ProductId>("ProductId");
-                    
-                    y.HasKey("OrderId", "ProductId");
-
-                    y.OwnsOne<MoneyValue>("Value", mv =>
-                    {
-                        mv.Property(p => p.Currency).HasColumnName("Currency");
-                        mv.Property(p => p.Value).HasColumnName("Value");
-                    });
-
-                    y.OwnsOne<MoneyValue>("ValueInEUR", mv =>
-                    {
-                        mv.Property(p => p.Currency).HasColumnName("CurrencyEUR");
-                        mv.Property(p => p.Value).HasColumnName("ValueInEUR");
-                    });
+                    mv.Property(p => p.Currency).HasColumnName("Currency");
+                    mv.Property(p => p.Value).HasColumnName("Value");
                 });
 
-                x.OwnsOne<MoneyValue>("_value", y =>
+                y.OwnsOne<MoneyValue>("ValueInEUR", mv =>
                 {
-                    y.Property(p => p.Currency).HasColumnName("Currency");
-                    y.Property(p => p.Value).HasColumnName("Value");
-                });
-
-                x.OwnsOne<MoneyValue>("_valueInEUR", y =>
-                {
-                    y.Property(p => p.Currency).HasColumnName("CurrencyEUR");
-                    y.Property(p => p.Value).HasColumnName("ValueInEUR");
+                    mv.Property(p => p.Currency).HasColumnName("CurrencyEUR");
+                    mv.Property(p => p.Value).HasColumnName("ValueInEUR");
                 });
             });
-        }
+
+            x.OwnsOne<MoneyValue>("_value", y =>
+            {
+                y.Property(p => p.Currency).HasColumnName("Currency");
+                y.Property(p => p.Value).HasColumnName("Value");
+            });
+
+            x.OwnsOne<MoneyValue>("_valueInEUR", y =>
+            {
+                y.Property(p => p.Currency).HasColumnName("CurrencyEUR");
+                y.Property(p => p.Value).HasColumnName("ValueInEUR");
+            });
+        });
     }
 }

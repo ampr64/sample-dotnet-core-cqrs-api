@@ -3,38 +3,37 @@ using System.Collections.Generic;
 using SampleProject.Domain.ForeignExchange;
 using SampleProject.Infrastructure.Caching;
 
-namespace SampleProject.Infrastructure.Domain.ForeignExchanges
+namespace SampleProject.Infrastructure.Domain.ForeignExchanges;
+
+public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
 {
-    public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
+    private readonly ICacheStore _cacheStore = cacheStore;
+
+    public List<ConversionRate> GetConversionRates()
     {
-        private readonly ICacheStore _cacheStore = cacheStore;
+        var ratesCache = this._cacheStore.Get(new ConversionRatesCacheKey());
 
-        public List<ConversionRate> GetConversionRates()
+        if (ratesCache != null)
         {
-            var ratesCache = this._cacheStore.Get(new ConversionRatesCacheKey());
-
-            if (ratesCache != null)
-            {
-                return ratesCache.Rates;
-            }
-
-            List<ConversionRate> rates = GetConversionRatesFromExternalApi();
-
-            this._cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
-
-            return rates;
+            return ratesCache.Rates;
         }
 
-        private static List<ConversionRate> GetConversionRatesFromExternalApi()
-        {
-            // Communication with external API. Here is only mock.
+        List<ConversionRate> rates = GetConversionRatesFromExternalApi();
 
-            var conversionRates = new List<ConversionRate>();
+        this._cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
 
-            conversionRates.Add(new ConversionRate("USD", "EUR", (decimal)0.88));
-            conversionRates.Add(new ConversionRate("EUR", "USD", (decimal)1.13));
+        return rates;
+    }
 
-            return conversionRates;
-        }
+    private static List<ConversionRate> GetConversionRatesFromExternalApi()
+    {
+        // Communication with external API. Here is only mock.
+
+        var conversionRates = new List<ConversionRate>();
+
+        conversionRates.Add(new ConversionRate("USD", "EUR", (decimal)0.88));
+        conversionRates.Add(new ConversionRate("EUR", "USD", (decimal)1.13));
+
+        return conversionRates;
     }
 }

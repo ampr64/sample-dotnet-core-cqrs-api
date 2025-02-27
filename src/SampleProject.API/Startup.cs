@@ -21,90 +21,89 @@ using Serilog;
 using Serilog.Formatting.Compact;
 
 [assembly: UserSecretsId("54e8eb06-aaa1-4fff-9f05-3ced1cb623c2")]
-namespace SampleProject.API
-{  
-    public class Startup
+namespace SampleProject.API;
+
+public class Startup
+{
+    private readonly IConfiguration _configuration;
+
+    private const string OrdersConnectionString = "OrdersConnectionString";
+
+    private static ILogger _logger;
+
+    public Startup(IWebHostEnvironment env)
     {
-        private readonly IConfiguration _configuration;
+        _logger = ConfigureLogger();
+        _logger.Information("Logger configured");
 
-        private const string OrdersConnectionString = "OrdersConnectionString";
+        this._configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json")
+            .AddJsonFile($"hosting.{env.EnvironmentName}.json")
+            .AddUserSecrets<Startup>()
+            .Build();
+    }
 
-        private static ILogger _logger;
+    public IServiceProvider ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers();
+        
+        services.AddMemoryCache();
 
-        public Startup(IWebHostEnvironment env)
+        services.AddSwaggerDocumentation();
+
+        services.AddProblemDetails(x =>
         {
-            _logger = ConfigureLogger();
-            _logger.Information("Logger configured");
+            x.Map<InvalidCommandException>(ex => new InvalidCommandProblemDetails(ex));
+            x.Map<BusinessRuleValidationException>(ex => new BusinessRuleValidationExceptionProblemDetails(ex));
+        });
+        
 
-            this._configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json")
-                .AddJsonFile($"hosting.{env.EnvironmentName}.json")
-                .AddUserSecrets<Startup>()
-                .Build();
+        services.AddHttpContextAccessor();
+        var serviceProvider = services.BuildServiceProvider();
+
+        IExecutionContextAccessor executionContextAccessor = new ExecutionContextAccessor(serviceProvider.GetService<IHttpContextAccessor>());
+
+        var children = this._configuration.GetSection("Caching").GetChildren();
+        var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value));
+        var emailsSettings = _configuration.GetSection("EmailsSettings").Get<EmailsSettings>();
+        var memoryCache = serviceProvider.GetService<IMemoryCache>();
+        return ApplicationStartup.Initialize(
+            services, 
+            this._configuration[OrdersConnectionString],
+            new MemoryCacheStore(memoryCache, cachingConfiguration),
+            null,
+            emailsSettings,
+            _logger,
+            executionContextAccessor);
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseMiddleware<CorrelationMiddleware>();
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseProblemDetails();
         }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            
-            services.AddMemoryCache();
+        app.UseRouting();
 
-            services.AddSwaggerDocumentation();
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-            services.AddProblemDetails(x =>
-            {
-                x.Map<InvalidCommandException>(ex => new InvalidCommandProblemDetails(ex));
-                x.Map<BusinessRuleValidationException>(ex => new BusinessRuleValidationExceptionProblemDetails(ex));
-            });
-            
+        app.UseSwaggerDocumentation();
+    }
 
-            services.AddHttpContextAccessor();
-            var serviceProvider = services.BuildServiceProvider();
-
-            IExecutionContextAccessor executionContextAccessor = new ExecutionContextAccessor(serviceProvider.GetService<IHttpContextAccessor>());
-
-            var children = this._configuration.GetSection("Caching").GetChildren();
-            var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value));
-            var emailsSettings = _configuration.GetSection("EmailsSettings").Get<EmailsSettings>();
-            var memoryCache = serviceProvider.GetService<IMemoryCache>();
-            return ApplicationStartup.Initialize(
-                services, 
-                this._configuration[OrdersConnectionString],
-                new MemoryCacheStore(memoryCache, cachingConfiguration),
-                null,
-                emailsSettings,
-                _logger,
-                executionContextAccessor);
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseMiddleware<CorrelationMiddleware>();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseProblemDetails();
-            }
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-            app.UseSwaggerDocumentation();
-        }
-
-        private static ILogger ConfigureLogger()
-        {
-            return new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{Context}] {Message:lj}{NewLine}{Exception}")
-                .WriteTo.File(new CompactJsonFormatter(), "logs/logs")
-                .CreateLogger();
-        }
+    private static ILogger ConfigureLogger()
+    {
+        return new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{Context}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File(new CompactJsonFormatter(), "logs/logs")
+            .CreateLogger();
     }
 }

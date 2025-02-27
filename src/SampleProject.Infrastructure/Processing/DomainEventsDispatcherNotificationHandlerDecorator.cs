@@ -2,20 +2,19 @@
 using System.Threading.Tasks;
 using MediatR;
 
-namespace SampleProject.Infrastructure.Processing
+namespace SampleProject.Infrastructure.Processing;
+
+public class DomainEventsDispatcherNotificationHandlerDecorator<T>(
+    IDomainEventsDispatcher domainEventsDispatcher,
+    INotificationHandler<T> decorated) : INotificationHandler<T> where T : INotification
 {
-    public class DomainEventsDispatcherNotificationHandlerDecorator<T>(
-        IDomainEventsDispatcher domainEventsDispatcher,
-        INotificationHandler<T> decorated) : INotificationHandler<T> where T : INotification
+    private readonly INotificationHandler<T> _decorated = decorated;
+    private readonly IDomainEventsDispatcher _domainEventsDispatcher = domainEventsDispatcher;
+
+    public async Task Handle(T notification, CancellationToken cancellationToken)
     {
-        private readonly INotificationHandler<T> _decorated = decorated;
-        private readonly IDomainEventsDispatcher _domainEventsDispatcher = domainEventsDispatcher;
+        await this._decorated.Handle(notification, cancellationToken);
 
-        public async Task Handle(T notification, CancellationToken cancellationToken)
-        {
-            await this._decorated.Handle(notification, cancellationToken);
-
-            await this._domainEventsDispatcher.DispatchEventsAsync();
-        }
+        await this._domainEventsDispatcher.DispatchEventsAsync();
     }
 }

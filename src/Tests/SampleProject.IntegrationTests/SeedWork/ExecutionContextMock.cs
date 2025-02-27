@@ -1,12 +1,11 @@
 ﻿using System;
 using SampleProject.Application.Configuration;
 
-namespace SampleProject.IntegrationTests.SeedWork
-{
-    public class ExecutionContextMock : IExecutionContextAccessor
-    {
-        public Guid CorrelationId { get; set; }
+namespace SampleProject.IntegrationTests.SeedWork;
 
-        public bool IsAvailable { get; set; }
-    }
+public class ExecutionContextMock : IExecutionContextAccessor
+{
+    public Guid CorrelationId { get; set; }
+
+    public bool IsAvailable { get; set; }
 }

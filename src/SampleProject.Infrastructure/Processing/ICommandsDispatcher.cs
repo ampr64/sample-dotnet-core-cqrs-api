@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SampleProject.Infrastructure.Processing
+namespace SampleProject.Infrastructure.Processing;
+
+public interface ICommandsDispatcher
 {
-    public interface ICommandsDispatcher
-    {
-        Task DispatchCommandAsync(Guid id);
-    }
+    Task DispatchCommandAsync(Guid id);
 }

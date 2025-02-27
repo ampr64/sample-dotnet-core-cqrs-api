@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace SampleProject.Application.Configuration.Validation
+namespace SampleProject.Application.Configuration.Validation;
+
+public class InvalidCommandException(string message, string details) : Exception(message)
 {
-    public class InvalidCommandException(string message, string details) : Exception(message)
-    {
-        public string Details { get; } = details;
-    }
+    public string Details { get; } = details;
 }

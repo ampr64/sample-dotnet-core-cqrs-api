@@ -1,12 +1,11 @@
-﻿namespace SampleProject.Domain.Customers.Orders
+﻿namespace SampleProject.Domain.Customers.Orders;
+
+public enum OrderStatus
 {
-    public enum OrderStatus
-    {
-        Placed = 0,
-        InRealization = 1,
-        Canceled = 2,
-        Delivered = 3,
-        Sent = 4,
-        WaitingForPayment = 5
-    }
+    Placed = 0,
+    InRealization = 1,
+    Canceled = 2,
+    Delivered = 3,
+    Sent = 4,
+    WaitingForPayment = 5
 }

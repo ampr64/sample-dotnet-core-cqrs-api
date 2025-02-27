@@ -1,34 +1,33 @@
 ﻿using System;
 
-namespace SampleProject.Application.Configuration.Commands
+namespace SampleProject.Application.Configuration.Commands;
+
+public class CommandBase : ICommand
 {
-    public class CommandBase : ICommand
+    public Guid Id { get; }
+
+    public CommandBase()
     {
-        public Guid Id { get; }
-
-        public CommandBase()
-        {
-            this.Id = Guid.NewGuid();
-        }
-
-        protected CommandBase(Guid id)
-        {
-            this.Id = id;
-        }
+        this.Id = Guid.NewGuid();
     }
 
-    public abstract class CommandBase<TResult> : ICommand<TResult>
+    protected CommandBase(Guid id)
     {
-        public Guid Id { get; }
+        this.Id = id;
+    }
+}
 
-        protected CommandBase()
-        {
-            this.Id = Guid.NewGuid();
-        }
+public abstract class CommandBase<TResult> : ICommand<TResult>
+{
+    public Guid Id { get; }
 
-        protected CommandBase(Guid id)
-        {
-            this.Id = id;
-        }
+    protected CommandBase()
+    {
+        this.Id = Guid.NewGuid();
+    }
+
+    protected CommandBase(Guid id)
+    {
+        this.Id = id;
     }
 }

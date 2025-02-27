@@ -1,9 +1,8 @@
-﻿namespace SampleProject.Domain.SeedWork
-{
-    public interface IBusinessRule
-    {
-        bool IsBroken();
+﻿namespace SampleProject.Domain.SeedWork;
 
-        string Message { get; }
-    }
+public interface IBusinessRule
+{
+    bool IsBroken();
+
+    string Message { get; }
 }

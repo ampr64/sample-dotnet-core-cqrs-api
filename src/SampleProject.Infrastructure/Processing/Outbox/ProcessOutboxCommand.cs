@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using SampleProject.Application.Configuration.Commands;
 
-namespace SampleProject.Infrastructure.Processing.Outbox
-{
-    public class ProcessOutboxCommand : CommandBase<Unit>, IRecurringCommand
-    {
+namespace SampleProject.Infrastructure.Processing.Outbox;
 
-    }
+public class ProcessOutboxCommand : CommandBase<Unit>, IRecurringCommand
+{
+
 }

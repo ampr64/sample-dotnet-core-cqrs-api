@@ -5,27 +5,26 @@ using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Emails;
 using SampleProject.Domain.Payments;
 
-namespace SampleProject.Application.Payments.SendEmailAfterPayment
+namespace SampleProject.Application.Payments.SendEmailAfterPayment;
+
+public class SendEmailAfterPaymentCommandHandler(
+    IEmailSender emailSender,
+    IPaymentRepository paymentRepository) : ICommandHandler<SendEmailAfterPaymentCommand, Unit>
 {
-    public class SendEmailAfterPaymentCommandHandler(
-        IEmailSender emailSender,
-        IPaymentRepository paymentRepository) : ICommandHandler<SendEmailAfterPaymentCommand, Unit>
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly IPaymentRepository _paymentRepository = paymentRepository;
+
+    public async Task<Unit> Handle(SendEmailAfterPaymentCommand request, CancellationToken cancellationToken)
     {
-        private readonly IEmailSender _emailSender = emailSender;
-        private readonly IPaymentRepository _paymentRepository = paymentRepository;
+        // Logic of preparing an email. This is only mock.
+        var emailMessage = new EmailMessage("from@email.com", "to@email.com", "content");
 
-        public async Task<Unit> Handle(SendEmailAfterPaymentCommand request, CancellationToken cancellationToken)
-        {
-            // Logic of preparing an email. This is only mock.
-            var emailMessage = new EmailMessage("from@email.com", "to@email.com", "content");
+        await _emailSender.SendEmailAsync(emailMessage);
 
-            await _emailSender.SendEmailAsync(emailMessage);
+        var payment = await this._paymentRepository.GetByIdAsync(request.PaymentId);
 
-            var payment = await this._paymentRepository.GetByIdAsync(request.PaymentId);
+        payment.MarkEmailNotificationIsSent();
 
-            payment.MarkEmailNotificationIsSent();
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

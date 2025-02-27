@@ -4,19 +4,18 @@ using MediatR;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.Customers.Orders;
 
-namespace SampleProject.Application.Customers.IntegrationHandlers
+namespace SampleProject.Application.Customers.IntegrationHandlers;
+
+public class MarkCustomerAsWelcomedCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<MarkCustomerAsWelcomedCommand, Unit>
 {
-    public class MarkCustomerAsWelcomedCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<MarkCustomerAsWelcomedCommand, Unit>
+    private readonly ICustomerRepository _customerRepository = customerRepository;
+
+    public async Task<Unit> Handle(MarkCustomerAsWelcomedCommand command, CancellationToken cancellationToken)
     {
-        private readonly ICustomerRepository _customerRepository = customerRepository;
+        var customer = await this._customerRepository.GetByIdAsync(command.CustomerId);
 
-        public async Task<Unit> Handle(MarkCustomerAsWelcomedCommand command, CancellationToken cancellationToken)
-        {
-            var customer = await this._customerRepository.GetByIdAsync(command.CustomerId);
+        customer.MarkAsWelcomedByEmail();
 
-            customer.MarkAsWelcomedByEmail();
-
-            return Unit.Value;
-        }
+        return Unit.Value;
     }
 }

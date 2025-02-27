@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace SampleProject.Application.Configuration.Emails
+namespace SampleProject.Application.Configuration.Emails;
+
+public interface IEmailSender
 {
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(EmailMessage message);
-    }
+    Task SendEmailAsync(EmailMessage message);
 }

@@ -1,7 +1,6 @@
-﻿namespace SampleProject.Infrastructure.Caching
+﻿namespace SampleProject.Infrastructure.Caching;
+
+public interface ICacheKey<TItem>
 {
-    public interface ICacheKey<TItem>
-    {
-        string CacheKey { get; }
-    }
+    string CacheKey { get; }
 }

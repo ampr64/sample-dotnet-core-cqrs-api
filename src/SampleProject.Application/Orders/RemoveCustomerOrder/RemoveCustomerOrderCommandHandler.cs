@@ -4,17 +4,16 @@ using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 
-namespace SampleProject.Application.Orders.RemoveCustomerOrder
+namespace SampleProject.Application.Orders.RemoveCustomerOrder;
+
+public class RemoveCustomerOrderCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<RemoveCustomerOrderCommand>
 {
-    public class RemoveCustomerOrderCommandHandler(ICustomerRepository customerRepository) : ICommandHandler<RemoveCustomerOrderCommand>
+    private readonly ICustomerRepository _customerRepository = customerRepository;
+
+    public async Task Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
     {
-        private readonly ICustomerRepository _customerRepository = customerRepository;
+        var customer = await this._customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
 
-        public async Task Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
-        {
-            var customer = await this._customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
-
-            customer.RemoveOrder(new OrderId(request.OrderId));
-        }
+        customer.RemoveOrder(new OrderId(request.OrderId));
     }
 }

@@ -2,13 +2,12 @@
 using Newtonsoft.Json;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Application.Configuration.DomainEvents
-{
-    public class DomainNotificationBase<T>(T domainEvent) : IDomainEventNotification<T> where T : IDomainEvent
-    {
-        [JsonIgnore]
-        public T DomainEvent { get; } = domainEvent;
+namespace SampleProject.Application.Configuration.DomainEvents;
 
-        public Guid Id { get; } = Guid.NewGuid();
-    }
+public class DomainNotificationBase<T>(T domainEvent) : IDomainEventNotification<T> where T : IDomainEvent
+{
+    [JsonIgnore]
+    public T DomainEvent { get; } = domainEvent;
+
+    public Guid Id { get; } = Guid.NewGuid();
 }

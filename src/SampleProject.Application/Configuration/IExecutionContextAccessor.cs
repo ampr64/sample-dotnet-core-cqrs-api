@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace SampleProject.Application.Configuration
-{
-    public interface IExecutionContextAccessor
-    {
-        Guid CorrelationId { get; }
+namespace SampleProject.Application.Configuration;
 
-        bool IsAvailable { get; }
-    }
+public interface IExecutionContextAccessor
+{
+    Guid CorrelationId { get; }
+
+    bool IsAvailable { get; }
 }

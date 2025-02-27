@@ -1,9 +1,8 @@
-﻿namespace SampleProject.Domain.Payments
+﻿namespace SampleProject.Domain.Payments;
+
+public enum PaymentStatus
 {
-    public enum PaymentStatus
-    {
-        ToPay = 0,
-        Paid = 1,
-        Overdue = 2
-    }
+    ToPay = 0,
+    Paid = 1,
+    Overdue = 2
 }

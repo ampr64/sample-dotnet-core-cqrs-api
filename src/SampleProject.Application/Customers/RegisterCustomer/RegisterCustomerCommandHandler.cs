@@ -5,26 +5,25 @@ using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Application.Customers.RegisterCustomer
+namespace SampleProject.Application.Customers.RegisterCustomer;
+
+public class RegisterCustomerCommandHandler(
+    ICustomerRepository customerRepository,
+    ICustomerUniquenessChecker customerUniquenessChecker,
+    IUnitOfWork unitOfWork) : ICommandHandler<RegisterCustomerCommand, CustomerDto>
 {
-    public class RegisterCustomerCommandHandler(
-        ICustomerRepository customerRepository,
-        ICustomerUniquenessChecker customerUniquenessChecker,
-        IUnitOfWork unitOfWork) : ICommandHandler<RegisterCustomerCommand, CustomerDto>
+    private readonly ICustomerRepository _customerRepository = customerRepository;
+    private readonly ICustomerUniquenessChecker _customerUniquenessChecker = customerUniquenessChecker;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
+    public async Task<CustomerDto> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
     {
-        private readonly ICustomerRepository _customerRepository = customerRepository;
-        private readonly ICustomerUniquenessChecker _customerUniquenessChecker = customerUniquenessChecker;
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        var customer = Customer.CreateRegistered(request.Email, request.Name, this._customerUniquenessChecker);
 
-        public async Task<CustomerDto> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
-        {
-            var customer = Customer.CreateRegistered(request.Email, request.Name, this._customerUniquenessChecker);
+        await this._customerRepository.AddAsync(customer);
 
-            await this._customerRepository.AddAsync(customer);
+        await this._unitOfWork.CommitAsync(cancellationToken);
 
-            await this._unitOfWork.CommitAsync(cancellationToken);
-
-            return new CustomerDto { Id = customer.Id.Value };
-        }
+        return new CustomerDto { Id = customer.Id.Value };
     }
 }

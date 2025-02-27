@@ -8,90 +8,89 @@ using SampleProject.Domain.ForeignExchange;
 using SampleProject.Domain.Products;
 using SampleProject.Domain.SeedWork;
 
-namespace SampleProject.Domain.Customers
+namespace SampleProject.Domain.Customers;
+
+public class Customer : Entity, IAggregateRoot
 {
-    public class Customer : Entity, IAggregateRoot
+    public CustomerId Id { get; private set; }
+
+    private string _email;
+
+    private string _name;
+
+    private readonly List<Order> _orders;
+
+    private bool _welcomeEmailWasSent;
+
+    private Customer()
     {
-        public CustomerId Id { get; private set; }
+        this._orders = new List<Order>();
+    }
+     
+    private Customer(string email, string name)
+    {
+        this.Id = new CustomerId(Guid.NewGuid());
+        _email = email;
+        _name = name;
+        _welcomeEmailWasSent = false;
+        _orders = new List<Order>();
 
-        private string _email;
+        this.AddDomainEvent(new CustomerRegisteredEvent(this.Id));
+    }
 
-        private string _name;
+    public static Customer CreateRegistered(
+        string email, 
+        string name,
+        ICustomerUniquenessChecker customerUniquenessChecker)
+    {
+        CheckRule(new CustomerEmailMustBeUniqueRule(customerUniquenessChecker, email));
 
-        private readonly List<Order> _orders;
+        return new Customer(email, name);
+    }
 
-        private bool _welcomeEmailWasSent;
+    public OrderId PlaceOrder(
+        List<OrderProductData> orderProductsData,
+        List<ProductPriceData> allProductPrices,
+        string currency, 
+        List<ConversionRate> conversionRates)
+    {
+        CheckRule(new CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(_orders));
+        CheckRule(new OrderMustHaveAtLeastOneProductRule(orderProductsData));
 
-        private Customer()
-        {
-            this._orders = new List<Order>();
-        }
-         
-        private Customer(string email, string name)
-        {
-            this.Id = new CustomerId(Guid.NewGuid());
-            _email = email;
-            _name = name;
-            _welcomeEmailWasSent = false;
-            _orders = new List<Order>();
+        var order = Order.CreateNew(orderProductsData, allProductPrices, currency, conversionRates);
 
-            this.AddDomainEvent(new CustomerRegisteredEvent(this.Id));
-        }
+        this._orders.Add(order);
 
-        public static Customer CreateRegistered(
-            string email, 
-            string name,
-            ICustomerUniquenessChecker customerUniquenessChecker)
-        {
-            CheckRule(new CustomerEmailMustBeUniqueRule(customerUniquenessChecker, email));
+        this.AddDomainEvent(new OrderPlacedEvent(order.Id, this.Id, order.GetValue()));
 
-            return new Customer(email, name);
-        }
+        return order.Id;
+    }
 
-        public OrderId PlaceOrder(
-            List<OrderProductData> orderProductsData,
-            List<ProductPriceData> allProductPrices,
-            string currency, 
-            List<ConversionRate> conversionRates)
-        {
-            CheckRule(new CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(_orders));
-            CheckRule(new OrderMustHaveAtLeastOneProductRule(orderProductsData));
+    public void ChangeOrder(
+        OrderId orderId, 
+        List<ProductPriceData> existingProducts,
+        List<OrderProductData> newOrderProductsData,
+        List<ConversionRate> conversionRates,
+        string currency)
+    {
+        CheckRule(new OrderMustHaveAtLeastOneProductRule(newOrderProductsData));
 
-            var order = Order.CreateNew(orderProductsData, allProductPrices, currency, conversionRates);
+        var order = this._orders.Single(x => x.Id == orderId);
+        order.Change(existingProducts, newOrderProductsData, conversionRates, currency);
 
-            this._orders.Add(order);
+        this.AddDomainEvent(new OrderChangedEvent(orderId));
+    }
 
-            this.AddDomainEvent(new OrderPlacedEvent(order.Id, this.Id, order.GetValue()));
+    public void RemoveOrder(OrderId orderId)
+    {
+        var order = this._orders.Single(x => x.Id == orderId);
+        order.Remove();
 
-            return order.Id;
-        }
+        this.AddDomainEvent(new OrderRemovedEvent(orderId));
+    }
 
-        public void ChangeOrder(
-            OrderId orderId, 
-            List<ProductPriceData> existingProducts,
-            List<OrderProductData> newOrderProductsData,
-            List<ConversionRate> conversionRates,
-            string currency)
-        {
-            CheckRule(new OrderMustHaveAtLeastOneProductRule(newOrderProductsData));
-
-            var order = this._orders.Single(x => x.Id == orderId);
-            order.Change(existingProducts, newOrderProductsData, conversionRates, currency);
-
-            this.AddDomainEvent(new OrderChangedEvent(orderId));
-        }
-
-        public void RemoveOrder(OrderId orderId)
-        {
-            var order = this._orders.Single(x => x.Id == orderId);
-            order.Remove();
-
-            this.AddDomainEvent(new OrderRemovedEvent(orderId));
-        }
-
-        public void MarkAsWelcomedByEmail()
-        {
-            this._welcomeEmailWasSent = true;
-        }
+    public void MarkAsWelcomedByEmail()
+    {
+        this._welcomeEmailWasSent = true;
     }
 }
