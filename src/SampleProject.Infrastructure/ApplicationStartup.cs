@@ -29,7 +29,7 @@ public class ApplicationStartup
         IServiceCollection services,
         string connectionString,
         ICacheStore cacheStore,
-        IEmailSender emailSender,
+        IEmailSender? emailSender,
         EmailsSettings emailsSettings,
         ILogger logger,
         IExecutionContextAccessor executionContextAccessor,
@@ -56,7 +56,7 @@ public class ApplicationStartup
     private static IServiceProvider CreateAutofacServiceProvider(
         IServiceCollection services,
         string connectionString,
-        IEmailSender emailSender,
+        IEmailSender? emailSender,
         EmailsSettings emailsSettings,
         ILogger logger,
         IExecutionContextAccessor executionContextAccessor)

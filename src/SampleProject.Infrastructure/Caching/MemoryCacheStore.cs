@@ -11,16 +11,8 @@ public class MemoryCacheStore(
 
     public void Add<TItem>(TItem item, ICacheKey<TItem> key, TimeSpan? expirationTime = null)
     {
-        var cachedObjectName = item.GetType().Name;
-        TimeSpan timespan;
-        if (expirationTime.HasValue)
-        {
-            timespan = expirationTime.Value;
-        }
-        else
-        {
-            timespan = _expirationConfiguration[cachedObjectName];
-        }
+        var cachedObjectName = item!.GetType().Name;
+        var timespan = expirationTime ?? _expirationConfiguration[cachedObjectName];
 
         this._memoryCache.Set(key.CacheKey, item, timespan);
     }
@@ -40,9 +32,9 @@ public class MemoryCacheStore(
         this._memoryCache.Set(key.CacheKey, item, offset);
     }
 
-    public TItem Get<TItem>(ICacheKey<TItem> key) where TItem : class
+    public TItem? Get<TItem>(ICacheKey<TItem> key) where TItem : class
     {
-        if (this._memoryCache.TryGetValue(key.CacheKey, out TItem value))
+        if (this._memoryCache.TryGetValue(key.CacheKey, out TItem? value))
         {
             return value;
         }

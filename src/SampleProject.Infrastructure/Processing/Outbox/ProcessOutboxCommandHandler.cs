@@ -40,8 +40,8 @@ internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFac
         {
             foreach (var message in messagesList)
             {
-                Type type = Assemblies.Application.GetType(message.Type);
-                var request = JsonSerializer.Deserialize(message.Data, type) as IDomainEventNotification;
+                var type = Assemblies.Application.GetType(message.Type)!;
+                var request = (JsonSerializer.Deserialize(message.Data, type) as IDomainEventNotification)!;
 
                 using (LogContext.Push(new OutboxMessageContextEnricher(request)))
                 {

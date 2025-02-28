@@ -16,10 +16,9 @@ public class CommandsDispatcher(
 
     public async Task DispatchCommandAsync(Guid id)
     {
-        var internalCommand = await this._ordersContext.InternalCommands.SingleOrDefaultAsync(x => x.Id == id);
-
-        Type type = Assembly.GetAssembly(typeof(MarkCustomerAsWelcomedCommand)).GetType(internalCommand.Type);
-        dynamic command = JsonSerializer.Deserialize(internalCommand.Data, type);
+        var internalCommand = await this._ordersContext.InternalCommands.SingleAsync(x => x.Id == id);
+        var type = Assembly.GetAssembly(typeof(MarkCustomerAsWelcomedCommand))!.GetType(internalCommand.Type)!;
+        var command = JsonSerializer.Deserialize(internalCommand.Data, type)!;
 
         internalCommand.ProcessedDate = DateTime.UtcNow;
 

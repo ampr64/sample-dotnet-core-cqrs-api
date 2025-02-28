@@ -28,8 +28,8 @@ internal class ProcessInternalCommandsCommandHandler(
 
         foreach (var internalCommand in internalCommandsList)
         {
-            Type type = Assemblies.Application.GetType(internalCommand.Type);
-            dynamic commandToProcess = JsonSerializer.Deserialize(internalCommand.Data, type);
+            var type = Assemblies.Application.GetType(internalCommand.Type)!;
+            dynamic? commandToProcess = JsonSerializer.Deserialize(internalCommand.Data, type);
 
             await CommandsExecutor.Execute(commandToProcess);
         }
@@ -39,8 +39,8 @@ internal class ProcessInternalCommandsCommandHandler(
 
     private class InternalCommandDto
     {
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
 
-        public string Data { get; set; }
+        public string Data { get; set; } = null!;
     }
 }

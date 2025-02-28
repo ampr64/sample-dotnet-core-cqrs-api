@@ -37,7 +37,7 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
 
             if (domainNotification != null)
             {
-                domainEventNotifications.Add(domainNotification as IDomainEventNotification<IDomainEvent>);
+                domainEventNotifications.Add((domainNotification as IDomainEventNotification<IDomainEvent>)!);
             }
         }
 
@@ -54,7 +54,7 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
 
         foreach (var domainEventNotification in domainEventNotifications)
         {
-            string type = domainEventNotification.GetType().FullName;
+            var type = domainEventNotification.GetType().FullName!;
             var data = JsonSerializer.Serialize(domainEventNotification);
             OutboxMessage outboxMessage = new OutboxMessage(
                 domainEventNotification.DomainEvent.OccurredOn,

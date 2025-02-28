@@ -55,20 +55,18 @@ public class Startup
         services.AddHttpContextAccessor();
         var serviceProvider = services.BuildServiceProvider();
 
-        IExecutionContextAccessor executionContextAccessor = new ExecutionContextAccessor(serviceProvider.GetService<IHttpContextAccessor>());
-
         var children = this._configuration.GetSection("Caching").GetChildren();
-        var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value));
-        var emailsSettings = _configuration.GetSection("EmailsSettings").Get<EmailsSettings>();
-        var memoryCache = serviceProvider.GetService<IMemoryCache>();
+        var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value!));
+        var emailsSettings = _configuration.GetRequiredSection(nameof(EmailsSettings)).Get<EmailsSettings>()!;
+        var memoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
         return ApplicationStartup.Initialize(
             services, 
-            this._configuration[OrdersConnectionString],
+            this._configuration.GetValue<string>(OrdersConnectionString)!,
             new MemoryCacheStore(memoryCache, cachingConfiguration),
             null,
             emailsSettings,
-            _logger,
-            executionContextAccessor);
+            _logger!,
+            new ExecutionContextAccessor(serviceProvider.GetRequiredService<IHttpContextAccessor>()));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -27,7 +27,7 @@ public class OutboxMessagesHelper
 
     public static T Deserialize<T>(OutboxMessageDto message) where T : class, INotification
     {
-        Type type = Assembly.GetAssembly(typeof(PaymentCreatedNotification)).GetType(message.Type);
-        return JsonSerializer.Deserialize(message.Data, type) as T;
+        var type = Assembly.GetAssembly(typeof(PaymentCreatedNotification))!.GetType(message.Type)!;
+        return (JsonSerializer.Deserialize(message.Data, type) as T)!;
     }
 }

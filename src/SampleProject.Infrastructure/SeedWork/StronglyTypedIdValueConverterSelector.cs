@@ -1,6 +1,6 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SampleProject.Domain.SeedWork;
+using System.Collections.Concurrent;
 
 namespace SampleProject.Infrastructure.SeedWork;
 
@@ -12,7 +12,7 @@ public class StronglyTypedIdValueConverterSelector(ValueConverterSelectorDepende
     private readonly ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo> _converters
         = new ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo>();
 
-    public override IEnumerable<ValueConverterInfo> Select(Type modelClrType, Type providerClrType = null)
+    public override IEnumerable<ValueConverterInfo> Select(Type modelClrType, Type? providerClrType = null)
     {
         var baseConverters = base.Select(modelClrType, providerClrType);
         foreach (var converter in baseConverters)
@@ -20,7 +20,7 @@ public class StronglyTypedIdValueConverterSelector(ValueConverterSelectorDepende
             yield return converter;
         }
 
-        var underlyingModelType = UnwrapNullableType(modelClrType);
+        var underlyingModelType = UnwrapNullableType(modelClrType)!;
         var underlyingProviderType = UnwrapNullableType(providerClrType);
 
         if (underlyingProviderType is null || underlyingProviderType == typeof(Guid))
@@ -35,19 +35,16 @@ public class StronglyTypedIdValueConverterSelector(ValueConverterSelectorDepende
                     return new ValueConverterInfo(
                         modelClrType: modelClrType,
                         providerClrType: typeof(Guid),
-                        factory: valueConverterInfo => (ValueConverter)Activator.CreateInstance(converterType, valueConverterInfo.MappingHints));
+                        factory: valueConverterInfo => (ValueConverter)Activator.CreateInstance(converterType, valueConverterInfo.MappingHints)!);
                 });
             }
         }
     }
 
-    private static Type UnwrapNullableType(Type type)
+    private static Type? UnwrapNullableType(Type? type)
     {
-        if (type is null)
-        {
-            return null;
-        }
-
-        return Nullable.GetUnderlyingType(type) ?? type;
+        return type is null
+            ? null
+            : Nullable.GetUnderlyingType(type) ?? type;
     }
 }
