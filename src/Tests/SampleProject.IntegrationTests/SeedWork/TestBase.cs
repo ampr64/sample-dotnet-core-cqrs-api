@@ -36,7 +36,7 @@ public class TestBase
 
         await ClearDatabase(sqlConnection);
 
-        EmailsSettings = new EmailsSettings {FromAddressEmail = "from@mail.com"};
+        EmailsSettings = new EmailsSettings { FromAddressEmail = "from@mail.com" };
 
         EmailSender = Substitute.For<IEmailSender>();
 
@@ -44,23 +44,25 @@ public class TestBase
 
         ApplicationStartup.Initialize(
             new ServiceCollection(),
-            ConnectionString, 
+            ConnectionString,
             new CacheStore(),
             EmailSender,
             EmailsSettings,
             Logger.None,
             ExecutionContext,
-            runQuartz:false);
+            runQuartz: false);
     }
 
     private static async Task ClearDatabase(IDbConnection connection)
     {
-        const string sql = "DELETE FROM app.InternalCommands " +
-                           "DELETE FROM app.OutboxMessages " +
-                           "DELETE FROM orders.OrderProducts " +
-                           "DELETE FROM orders.Orders " +
-                           "DELETE FROM payments.Payments " +
-                           "DELETE FROM orders.Customers ";
+        const string sql = """
+                           DELETE FROM app.InternalCommands
+                           DELETE FROM app.OutboxMessages
+                           DELETE FROM orders.OrderProducts
+                           DELETE FROM orders.Orders
+                           DELETE FROM payments.Payments
+                           DELETE FROM orders.Customers
+                           """;
 
         await connection.ExecuteScalarAsync(sql);
     }

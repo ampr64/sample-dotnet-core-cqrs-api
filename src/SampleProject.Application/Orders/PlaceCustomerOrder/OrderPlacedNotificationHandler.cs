@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using MediatR;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Emails;
 using SampleProject.Domain.Customers.Orders;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder;
 
@@ -21,21 +21,23 @@ public class OrderPlacedNotificationHandler(
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
 
-        const string sql = "SELECT [Customer].[Email] " +
-                           "FROM orders.v_Customers AS [Customer] " +
-                           "WHERE [Customer].[Id] = @Id";
+        const string sql = """
+                           SELECT [Customer].[Email]
+                           FROM orders.v_Customers AS [Customer]
+                           WHERE [Customer].[Id] = @Id
+                           """;
 
-        var customerEmail = await connection.QueryFirstAsync<string>(sql, 
+        var customerEmail = await connection.QueryFirstAsync<string>(sql,
             new
             {
                 Id = request.CustomerId.Value
             });
 
         var emailMessage = new EmailMessage(
-            _emailsSettings.FromAddressEmail, 
-            customerEmail, 
+            _emailsSettings.FromAddressEmail,
+            customerEmail,
             OrderNotificationsService.GetOrderEmailConfirmationDescription(request.OrderId));
-        
+
         await _emailSender.SendEmailAsync(emailMessage);
     }
 }

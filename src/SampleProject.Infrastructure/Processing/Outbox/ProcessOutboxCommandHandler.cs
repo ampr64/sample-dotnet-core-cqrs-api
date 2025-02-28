@@ -19,19 +19,23 @@ internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFac
     public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
     {
         var connection = this._sqlConnectionFactory.GetOpenConnection();
-        const string sql = "SELECT " +
-                           "[OutboxMessage].[Id], " +
-                           "[OutboxMessage].[Type], " +
-                           "[OutboxMessage].[Data] " +
-                           "FROM [app].[OutboxMessages] AS [OutboxMessage] " +
-                           "WHERE [OutboxMessage].[ProcessedDate] IS NULL";
+        const string sql = """
+                           SELECT
+                           [OutboxMessage].[Id],
+                           [OutboxMessage].[Type],
+                           [OutboxMessage].[Data]
+                           FROM [app].[OutboxMessages] AS [OutboxMessage]
+                           WHERE [OutboxMessage].[ProcessedDate] IS NULL
+                           """;
 
         var messages = await connection.QueryAsync<OutboxMessageDto>(sql);
         var messagesList = messages.AsList();
 
-        const string sqlUpdateProcessedDate = "UPDATE [app].[OutboxMessages] " +
-                                              "SET [ProcessedDate] = @Date " +
-                                              "WHERE [Id] = @Id";
+        const string sqlUpdateProcessedDate = """
+                                              UPDATE [app].[OutboxMessages]
+                                              SET [ProcessedDate] = @Date
+                                              WHERE [Id] = @Id
+                                              """;
         if (messagesList.Count > 0)
         {
             foreach (var message in messagesList)
@@ -50,7 +54,6 @@ internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFac
                         message.Id
                     });
                 }
-
             }
         }
 

@@ -12,13 +12,15 @@ public class GetCustomerDetailsQueryHandler(ISqlConnectionFactory sqlConnectionF
 
     public Task<CustomerDetailsDto> Handle(GetCustomerDetailsQuery request, CancellationToken cancellationToken)
     {
-        const string sql = "SELECT " +
-                           "[Customer].[Id], " +
-                           "[Customer].[Name], " +
-                           "[Customer].[Email], " +
-                           "[Customer].[WelcomeEmailWasSent] " +
-                           "FROM orders.v_Customers AS [Customer] " +
-                           "WHERE [Customer].[Id] = @CustomerId ";
+        const string sql = """
+            SELECT
+            [Customer].[Id],
+            [Customer].[Name],
+            [Customer].[Email],
+            [Customer].[WelcomeEmailWasSent]
+            FROM orders.v_Customers AS [Customer]
+            WHERE [Customer].[Id] = @CustomerId
+            """;
 
         var connection = _sqlConnectionFactory.GetOpenConnection();
 

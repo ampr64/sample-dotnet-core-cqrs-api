@@ -15,11 +15,13 @@ internal class ProcessInternalCommandsCommandHandler(
     {
         var connection = this._sqlConnectionFactory.GetOpenConnection();
 
-        const string sql = "SELECT " +
-                           "[Command].[Type], " +
-                           "[Command].[Data] " +
-                           "FROM [app].[InternalCommands] AS [Command] " +
-                           "WHERE [Command].[ProcessedDate] IS NULL";
+        const string sql = """
+                           SELECT
+                           [Command].[Type],
+                           [Command].[Data]
+                           FROM [app].[InternalCommands] AS [Command]
+                           WHERE [Command].[ProcessedDate] IS NULL
+                           """;
         var commands = await connection.QueryAsync<InternalCommandDto>(sql);
 
         var internalCommandsList = commands.AsList();
