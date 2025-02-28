@@ -22,7 +22,7 @@ public class Startup
 
     private const string OrdersConnectionString = "OrdersConnectionString";
 
-    private static ILogger _logger;
+    private static Logger? _logger;
 
     public Startup(IWebHostEnvironment env)
     {
