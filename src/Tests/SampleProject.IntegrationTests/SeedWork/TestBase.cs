@@ -1,6 +1,6 @@
 using System.Data;
-using System.Data.SqlClient;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NUnit.Framework;
@@ -25,12 +25,8 @@ public class TestBase
     {
         const string connectionStringEnvironmentVariable =
             "ASPNETCORE_SampleProject_IntegrationTests_ConnectionString";
-        ConnectionString = Environment.GetEnvironmentVariable(connectionStringEnvironmentVariable);
-        if (ConnectionString == null)
-        {
-            throw new ApplicationException(
-                $"Define connection string to integration tests database using environment variable: {connectionStringEnvironmentVariable}");
-        }
+        ConnectionString = Environment.GetEnvironmentVariable(connectionStringEnvironmentVariable)
+            ?? throw new ApplicationException($"Define connection string to integration tests database using environment variable: {connectionStringEnvironmentVariable}");
 
         await using var sqlConnection = new SqlConnection(ConnectionString);
 
