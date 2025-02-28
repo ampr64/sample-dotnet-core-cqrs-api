@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using SampleProject.Application.Configuration.DomainEvents;
+﻿using SampleProject.Application.Configuration.DomainEvents;
 using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.Customers.Orders.Events;
+using System.Text.Json.Serialization;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder;
 

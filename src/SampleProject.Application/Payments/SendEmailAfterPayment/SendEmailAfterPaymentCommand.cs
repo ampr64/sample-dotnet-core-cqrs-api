@@ -1,8 +1,8 @@
-﻿using System;
-using MediatR;
-using Newtonsoft.Json;
+﻿using MediatR;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.Payments;
+using System;
+using System.Text.Json.Serialization;
 
 namespace SampleProject.Application.Payments.SendEmailAfterPayment;
 

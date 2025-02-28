@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using SampleProject.Application.Configuration.DomainEvents;
+﻿using SampleProject.Application.Configuration.DomainEvents;
 using SampleProject.Domain.Customers;
+using System.Text.Json.Serialization;
 
 namespace SampleProject.Application.Customers.IntegrationHandlers;
 

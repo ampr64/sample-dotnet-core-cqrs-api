@@ -1,6 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
-using SampleProject.Domain.SeedWork;
+﻿using SampleProject.Domain.SeedWork;
+using System;
+using System.Text.Json.Serialization;
 
 namespace SampleProject.Application.Configuration.DomainEvents;
 

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using SampleProject.Application.Configuration.DomainEvents;
+﻿using SampleProject.Application.Configuration.DomainEvents;
 using SampleProject.Domain.Payments;
+using System.Text.Json.Serialization;
 
 namespace SampleProject.Application.Payments;
 

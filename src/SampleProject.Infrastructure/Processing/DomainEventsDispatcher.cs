@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using Autofac.Core;
 using MediatR;
-using Newtonsoft.Json;
 using SampleProject.Application.Configuration.DomainEvents;
 using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure.Database;
 using SampleProject.Infrastructure.Processing.Outbox;
+using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing;
 
@@ -55,7 +55,7 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
         foreach (var domainEventNotification in domainEventNotifications)
         {
             string type = domainEventNotification.GetType().FullName;
-            var data = JsonConvert.SerializeObject(domainEventNotification);
+            var data = JsonSerializer.Serialize(domainEventNotification);
             OutboxMessage outboxMessage = new OutboxMessage(
                 domainEventNotification.DomainEvent.OccurredOn,
                 type,

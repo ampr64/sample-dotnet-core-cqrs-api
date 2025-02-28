@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Reflection;
+using System.Text.Json;
 using Dapper;
 using MediatR;
-using Newtonsoft.Json;
 using SampleProject.Application.Payments;
 using SampleProject.Infrastructure.Processing.Outbox;
 
@@ -28,6 +28,6 @@ public class OutboxMessagesHelper
     public static T Deserialize<T>(OutboxMessageDto message) where T : class, INotification
     {
         Type type = Assembly.GetAssembly(typeof(PaymentCreatedNotification)).GetType(message.Type);
-        return JsonConvert.DeserializeObject(message.Data, type) as T;
+        return JsonSerializer.Deserialize(message.Data, type) as T;
     }
 }

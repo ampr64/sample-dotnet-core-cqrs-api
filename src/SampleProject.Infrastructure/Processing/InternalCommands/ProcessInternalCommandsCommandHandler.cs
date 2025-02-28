@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using MediatR;
-using Newtonsoft.Json;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
+using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing.InternalCommands;
 
@@ -29,7 +29,7 @@ internal class ProcessInternalCommandsCommandHandler(
         foreach (var internalCommand in internalCommandsList)
         {
             Type type = Assemblies.Application.GetType(internalCommand.Type);
-            dynamic commandToProcess = JsonConvert.DeserializeObject(internalCommand.Data, type);
+            dynamic commandToProcess = JsonSerializer.Deserialize(internalCommand.Data, type);
 
             await CommandsExecutor.Execute(commandToProcess);
         }

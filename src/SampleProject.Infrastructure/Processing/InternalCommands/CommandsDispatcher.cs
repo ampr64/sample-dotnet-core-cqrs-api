@@ -1,9 +1,9 @@
-﻿using System.Reflection;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using SampleProject.Application.Customers;
 using SampleProject.Infrastructure.Database;
+using System.Reflection;
+using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing.InternalCommands;
 
@@ -19,7 +19,7 @@ public class CommandsDispatcher(
         var internalCommand = await this._ordersContext.InternalCommands.SingleOrDefaultAsync(x => x.Id == id);
 
         Type type = Assembly.GetAssembly(typeof(MarkCustomerAsWelcomedCommand)).GetType(internalCommand.Type);
-        dynamic command = JsonConvert.DeserializeObject(internalCommand.Data, type);
+        dynamic command = JsonSerializer.Deserialize(internalCommand.Data, type);
 
         internalCommand.ProcessedDate = DateTime.UtcNow;
 

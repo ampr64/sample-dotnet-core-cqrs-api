@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Newtonsoft.Json;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Processing;
+using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing;
 
@@ -14,15 +14,18 @@ public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICo
     {
         var connection = this._sqlConnectionFactory.GetOpenConnection();
 
-        const string sqlInsert = "INSERT INTO [app].[InternalCommands] ([Id], [EnqueueDate] , [Type], [Data]) VALUES " +
-                                 "(@Id, @EnqueueDate, @Type, @Data)";
+        const string sqlInsert = """
+            INSERT INTO [app].[InternalCommands]
+            ([Id], [EnqueueDate], [Type], [Data]) VALUES
+            (@Id, @EnqueueDate, @Type, @Data)
+            """;
 
         await connection.ExecuteAsync(sqlInsert, new
         {
             command.Id,
             EnqueueDate = DateTime.UtcNow,
             Type = command.GetType().FullName,
-            Data = JsonConvert.SerializeObject(command)
+            Data = JsonSerializer.Serialize(command)
         });
     }
 }

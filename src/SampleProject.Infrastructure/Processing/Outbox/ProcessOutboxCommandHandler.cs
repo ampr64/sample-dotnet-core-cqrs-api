@@ -1,12 +1,12 @@
 ﻿using Dapper;
 using MediatR;
-using Newtonsoft.Json;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.DomainEvents;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
+using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing.Outbox;
 
@@ -40,9 +40,8 @@ internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFac
         {
             foreach (var message in messagesList)
             {
-                Type type = Assemblies.Application
-                    .GetType(message.Type);
-                var request = JsonConvert.DeserializeObject(message.Data, type) as IDomainEventNotification;
+                Type type = Assemblies.Application.GetType(message.Type);
+                var request = JsonSerializer.Deserialize(message.Data, type) as IDomainEventNotification;
 
                 using (LogContext.Push(new OutboxMessageContextEnricher(request)))
                 {
