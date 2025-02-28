@@ -1,7 +1,3 @@
-﻿using SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.Customers;
 
-namespace SampleProject.Domain.Customers;
-
-public class CustomerId(Guid value) : TypedIdValueBase(value)
-{
-}
+public readonly record struct CustomerId(Guid Value);

@@ -42,17 +42,11 @@ public class DataAccessModule(string databaseConnectionString) : Autofac.Module
             .As<IPaymentRepository>()
             .InstancePerLifetimeScope();
 
-        builder.RegisterType<StronglyTypedIdValueConverterSelector>()
-            .As<IValueConverterSelector>()
-            .SingleInstance();
-
         builder
             .Register(c =>
             {
                 var dbContextOptionsBuilder = new DbContextOptionsBuilder<OrdersContext>();
                 dbContextOptionsBuilder.UseSqlServer(_databaseConnectionString);
-                dbContextOptionsBuilder
-                    .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
 
                 return new OrdersContext(dbContextOptionsBuilder.Options);
             })

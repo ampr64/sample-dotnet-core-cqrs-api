@@ -1,7 +1,3 @@
-﻿using SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.Customers.Orders;
 
-namespace SampleProject.Domain.Customers.Orders;
-
-public class OrderId(Guid value) : TypedIdValueBase(value)
-{
-}
+public readonly record struct OrderId(Guid Value);

@@ -118,9 +118,6 @@ public class ApplicationStartup
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<OrdersContext>();
             dbContextOptionsBuilder.UseSqlServer(connectionString);
 
-            dbContextOptionsBuilder
-                .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
-
             return new OrdersContext(dbContextOptionsBuilder.Options);
         }).AsSelf().InstancePerLifetimeScope();
 

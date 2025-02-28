@@ -1,7 +1,3 @@
-﻿using SampleProject.Domain.SeedWork;
+﻿namespace SampleProject.Domain.Payments;
 
-namespace SampleProject.Domain.Payments;
-
-public class PaymentId(Guid value) : TypedIdValueBase(value)
-{
-}
+public readonly record struct PaymentId(Guid Value);
