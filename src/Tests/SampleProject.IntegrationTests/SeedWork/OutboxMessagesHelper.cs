@@ -1,10 +1,10 @@
-﻿using System.Data;
-using System.Reflection;
-using System.Text.Json;
-using Dapper;
+﻿using Dapper;
 using MediatR;
 using SampleProject.Application.Payments;
 using SampleProject.Infrastructure.Processing.Outbox;
+using System.Data;
+using System.Reflection;
+using System.Text.Json;
 
 namespace SampleProject.IntegrationTests.SeedWork;
 

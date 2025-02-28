@@ -1,11 +1,11 @@
-﻿using System.Reflection;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
 using Autofac.Features.Variance;
 using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 using SampleProject.Application.Configuration.Validation;
+using System.Reflection;
 
 namespace SampleProject.Infrastructure.Processing;
 

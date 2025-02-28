@@ -2,16 +2,15 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using SampleProject.API.Configuration;
-using SampleProject.Application.Configuration.Validation;
 using SampleProject.API.SeedWork;
-using SampleProject.Application.Configuration;
 using SampleProject.Application.Configuration.Emails;
+using SampleProject.Application.Configuration.Validation;
 using SampleProject.Domain.SeedWork;
 using SampleProject.Infrastructure;
 using SampleProject.Infrastructure.Caching;
 using Serilog;
-using Serilog.Formatting.Compact;
 using Serilog.Core;
+using Serilog.Formatting.Compact;
 
 [assembly: UserSecretsId("54e8eb06-aaa1-4fff-9f05-3ced1cb623c2")]
 namespace SampleProject.API;

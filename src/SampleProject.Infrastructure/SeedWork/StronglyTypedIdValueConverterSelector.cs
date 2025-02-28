@@ -10,7 +10,7 @@ namespace SampleProject.Infrastructure.SeedWork;
 public class StronglyTypedIdValueConverterSelector(ValueConverterSelectorDependencies dependencies) : ValueConverterSelector(dependencies)
 {
     private readonly ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo> _converters
-        = new ConcurrentDictionary<(Type ModelClrType, Type ProviderClrType), ValueConverterInfo>();
+        = new();
 
     public override IEnumerable<ValueConverterInfo> Select(Type modelClrType, Type? providerClrType = null)
     {
