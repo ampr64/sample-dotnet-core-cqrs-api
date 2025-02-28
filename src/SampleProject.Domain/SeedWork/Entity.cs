@@ -5,12 +5,12 @@
 /// </summary>
 public abstract class Entity
 {
-    private List<IDomainEvent> _domainEvents;
+    private readonly List<IDomainEvent> _domainEvents = [];
 
     /// <summary>
     /// Domain events occurred.
     /// </summary>
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents?.AsReadOnly();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     /// <summary>
     /// Add domain event.
@@ -18,7 +18,6 @@ public abstract class Entity
     /// <param name="domainEvent"></param>
     protected void AddDomainEvent(IDomainEvent domainEvent)
     {
-        _domainEvents = _domainEvents ?? new List<IDomainEvent>();
         this._domainEvents.Add(domainEvent);
     }
 

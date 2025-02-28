@@ -43,7 +43,7 @@ public class MoneyValueTests : TestBase
         var valueInEuros = MoneyValue.Of(100, "EUR");
         var valueInEuros2 = MoneyValue.Of(50, "EUR");
 
-        IList<MoneyValue> values = new List<MoneyValue>
+        var values = new List<MoneyValue>
         {
             valueInEuros, valueInEuros2
         };

@@ -22,7 +22,7 @@ public class OrdersTests : TestBase
         var customerEmail = "email@email.com";
         var customer = await CommandsExecutor.Execute(new RegisterCustomerCommand(customerEmail, "Sample Customer"));
 
-        List<ProductDto> products = new List<ProductDto>();
+        var products = new List<ProductDto>();
         var productId = Guid.Parse("9DB6E474-AE74-4CF5-A0DC-BA23A42E2566");
         products.Add(new ProductDto(productId, 2));
         var orderId = await CommandsExecutor.Execute(new PlaceCustomerOrderCommand(customer.Id, products, "EUR"));

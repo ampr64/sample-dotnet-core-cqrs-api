@@ -28,7 +28,7 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
         var domainEventNotifications = new List<IDomainEventNotification<IDomainEvent>>();
         foreach (var domainEvent in domainEvents)
         {
-            Type domainEvenNotificationType = typeof(IDomainEventNotification<>);
+            var domainEvenNotificationType = typeof(IDomainEventNotification<>);
             var domainNotificationWithGenericType = domainEvenNotificationType.MakeGenericType(domainEvent.GetType());
             var domainNotification = _scope.ResolveOptional(domainNotificationWithGenericType, new List<Parameter>
             {

@@ -15,7 +15,7 @@ public class Order : Entity
 
     private MoneyValue _valueInEUR;
 
-    private List<OrderProduct> _orderProducts;
+    private readonly List<OrderProduct> _orderProducts = [];
 
     private OrderStatus _status;
 
@@ -25,8 +25,6 @@ public class Order : Entity
 
     private Order()
     {
-        this._orderProducts = new List<OrderProduct>();
-        this._isRemoved = false;
     }
 
     private Order(
@@ -38,7 +36,6 @@ public class Order : Entity
     {
         this._orderDate = SystemClock.Now;
         this.Id = new OrderId(Guid.NewGuid());
-        this._orderProducts = new List<OrderProduct>();
 
         foreach (var orderProductData in orderProductsData)
         {

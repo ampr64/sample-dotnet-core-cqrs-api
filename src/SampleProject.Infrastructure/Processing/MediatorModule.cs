@@ -45,8 +45,8 @@ public class MediatorModule : Autofac.Module
 
     private class ScopedContravariantRegistrationSource : IRegistrationSource
     {
-        private readonly IRegistrationSource _source = new ContravariantRegistrationSource();
-        private readonly List<Type> _types = new List<Type>();
+        private readonly ContravariantRegistrationSource _source = new();
+        private readonly List<Type> _types = [];
 
         public ScopedContravariantRegistrationSource(params Type[] types)
         {

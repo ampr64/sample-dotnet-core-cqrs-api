@@ -16,7 +16,7 @@ public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
             return ratesCache.Rates;
         }
 
-        List<ConversionRate> rates = GetConversionRatesFromExternalApi();
+        var rates = GetConversionRatesFromExternalApi();
 
         this._cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
 
@@ -27,10 +27,11 @@ public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
     {
         // Communication with external API. Here is only mock.
 
-        var conversionRates = new List<ConversionRate>();
-
-        conversionRates.Add(new ConversionRate("USD", "EUR", (decimal)0.88));
-        conversionRates.Add(new ConversionRate("EUR", "USD", (decimal)1.13));
+        var conversionRates = new List<ConversionRate>
+        {
+            new("USD", "EUR", (decimal)0.88),
+            new("EUR", "USD", (decimal)1.13)
+        };
 
         return conversionRates;
     }

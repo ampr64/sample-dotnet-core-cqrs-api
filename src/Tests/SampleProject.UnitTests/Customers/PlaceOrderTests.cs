@@ -18,22 +18,24 @@ public class PlaceOrderTests : TestBase
         // Arrange
         var customer = CustomerFactory.Create();
 
-        var orderProductsData = new List<OrderProductData>();
-        orderProductsData.Add(new OrderProductData(SampleProducts.Product1Id, 2));
-        
+        var orderProductsData = new List<OrderProductData>
+        {
+            new(SampleProducts.Product1Id, 2)
+        };
+
         var allProductPrices = new List<ProductPriceData>
         {
             SampleProductPrices.Product1EUR, SampleProductPrices.Product1USD
         };
-        
+
         const string currency = "EUR";
         var conversionRates = GetConversionRates();
-        
+
         // Act
         customer.PlaceOrder(
-            orderProductsData, 
-            allProductPrices, 
-            currency, 
+            orderProductsData,
+            allProductPrices,
+            currency,
             conversionRates);
 
         // Assert
@@ -75,8 +77,10 @@ public class PlaceOrderTests : TestBase
         // Arrange
         var customer = CustomerFactory.Create();
 
-        var orderProductsData = new List<OrderProductData>();
-        orderProductsData.Add(new OrderProductData(SampleProducts.Product1Id, 2));
+        var orderProductsData = new List<OrderProductData>
+        {
+            new(SampleProducts.Product1Id, 2)
+        };
 
         var allProductPrices = new List<ProductPriceData>
         {
@@ -117,10 +121,11 @@ public class PlaceOrderTests : TestBase
     private static List<ConversionRate> GetConversionRates()
     {
 
-        var conversionRates = new List<ConversionRate>();
-
-        conversionRates.Add(new ConversionRate("USD", "EUR", (decimal)0.88));
-        conversionRates.Add(new ConversionRate("EUR", "USD", (decimal)1.13));
+        var conversionRates = new List<ConversionRate>
+        {
+            new("USD", "EUR", (decimal)0.88),
+            new("EUR", "USD", (decimal)1.13)
+        };
 
         return conversionRates;
     }

@@ -8,14 +8,9 @@ public class DomainEventsTestHelper
 {
     public static List<IDomainEvent> GetAllDomainEvents(Entity aggregate)
     {
-        List<IDomainEvent> domainEvents = new List<IDomainEvent>();
+        var domainEvents = aggregate.DomainEvents.ToList();
 
-        if (aggregate.DomainEvents != null)
-        {
-            domainEvents.AddRange(aggregate.DomainEvents);
-        }
-
-        var fields = aggregate.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Concat(aggregate.GetType().BaseType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
+        var fields = aggregate.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Concat(aggregate.GetType().BaseType!.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
 
         foreach (var field in fields)
         {

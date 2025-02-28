@@ -15,13 +15,12 @@ public class Customer : Entity, IAggregateRoot
 
     private string _name;
 
-    private readonly List<Order> _orders;
+    private readonly List<Order> _orders = [];
 
     private bool _welcomeEmailWasSent;
 
     private Customer()
     {
-        this._orders = new List<Order>();
     }
      
     private Customer(string email, string name)
@@ -30,7 +29,6 @@ public class Customer : Entity, IAggregateRoot
         _email = email;
         _name = name;
         _welcomeEmailWasSent = false;
-        _orders = new List<Order>();
 
         this.AddDomainEvent(new CustomerRegisteredEvent(this.Id));
     }
