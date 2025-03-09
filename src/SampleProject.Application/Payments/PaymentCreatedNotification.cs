@@ -10,12 +10,12 @@ public class PaymentCreatedNotification : DomainNotificationBase<PaymentCreatedE
 
     public PaymentCreatedNotification(PaymentCreatedEvent domainEvent) : base(domainEvent)
     {
-        this.PaymentId = domainEvent.PaymentId;
+        PaymentId = domainEvent.PaymentId;
     }
 
     [JsonConstructor]
     public PaymentCreatedNotification(PaymentId paymentId) : base(null)
     {
-        this.PaymentId = paymentId;
+        PaymentId = paymentId;
     }
 }

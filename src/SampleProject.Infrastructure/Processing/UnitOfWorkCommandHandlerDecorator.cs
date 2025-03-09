@@ -18,7 +18,7 @@ public class UnitOfWorkCommandHandlerDecorator<T>(
 
     public async Task Handle(T command, CancellationToken cancellationToken)
     {
-        await this._decorated.Handle(command, cancellationToken);
+        await _decorated.Handle(command, cancellationToken);
 
         if (command is InternalCommandBase)
         {
@@ -32,6 +32,6 @@ public class UnitOfWorkCommandHandlerDecorator<T>(
             }
         }
 
-        await this._unitOfWork.CommitAsync(cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

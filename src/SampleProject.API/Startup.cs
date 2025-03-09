@@ -28,7 +28,7 @@ public class Startup
         _logger = ConfigureLogger();
         _logger.Information("Logger configured");
 
-        this._configuration = new ConfigurationBuilder()
+        _configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{env.EnvironmentName}.json")
             .AddJsonFile($"hosting.{env.EnvironmentName}.json")
@@ -54,13 +54,13 @@ public class Startup
         services.AddHttpContextAccessor();
         var serviceProvider = services.BuildServiceProvider();
 
-        var children = this._configuration.GetSection("Caching").GetChildren();
+        var children = _configuration.GetSection("Caching").GetChildren();
         var cachingConfiguration = children.ToDictionary(child => child.Key, child => TimeSpan.Parse(child.Value!));
         var emailsSettings = _configuration.GetRequiredSection(nameof(EmailsSettings)).Get<EmailsSettings>()!;
         var memoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
         return ApplicationStartup.Initialize(
             services, 
-            this._configuration.GetValue<string>(OrdersConnectionString)!,
+            _configuration.GetValue<string>(OrdersConnectionString)!,
             new MemoryCacheStore(memoryCache, cachingConfiguration),
             null,
             emailsSettings,

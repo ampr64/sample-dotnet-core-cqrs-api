@@ -25,18 +25,18 @@ internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<Change
         IForeignExchange foreignExchange, 
         ISqlConnectionFactory sqlConnectionFactory)
     {
-        this._customerRepository = customerRepository;
+        _customerRepository = customerRepository;
         _foreignExchange = foreignExchange;
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
     public async Task<Unit> Handle(ChangeCustomerOrderCommand request, CancellationToken cancellationToken)
     {
-        var customer = await this._customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
+        var customer = await _customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
 
         var orderId = new OrderId(request.OrderId);
 
-        var conversionRates = this._foreignExchange.GetConversionRates();
+        var conversionRates = _foreignExchange.GetConversionRates();
         var orderProducts = request
                 .Products
                 .Select(x => new OrderProductData(new ProductId(x.Id), x.Quantity))

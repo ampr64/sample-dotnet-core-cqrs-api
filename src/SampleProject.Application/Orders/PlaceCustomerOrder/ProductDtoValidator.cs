@@ -6,7 +6,7 @@ public class ProductDtoValidator : AbstractValidator<ProductDto>
 {
     public ProductDtoValidator()
     {
-        this.RuleFor(x => x.Quantity).GreaterThan(0)
+        RuleFor(x => x.Quantity).GreaterThan(0)
             .WithMessage("At least one product has invalid quantity");
     }
 }

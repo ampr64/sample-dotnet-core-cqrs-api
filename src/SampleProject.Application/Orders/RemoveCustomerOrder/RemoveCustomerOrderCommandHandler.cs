@@ -12,7 +12,7 @@ public class RemoveCustomerOrderCommandHandler(ICustomerRepository customerRepos
 
     public async Task Handle(RemoveCustomerOrderCommand request, CancellationToken cancellationToken)
     {
-        var customer = await this._customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
+        var customer = await _customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
 
         customer.RemoveOrder(new OrderId(request.OrderId));
     }

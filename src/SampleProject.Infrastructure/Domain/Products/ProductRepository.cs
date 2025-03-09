@@ -11,7 +11,7 @@ public class ProductRepository(OrdersContext context) : IProductRepository
 
     public async Task<List<Product>> GetByIdsAsync(List<ProductId> ids)
     {
-        return await this._context
+        return await _context
             .Products
             .IncludePaths("_prices")
             .Where(x => ids.Contains(x.Id)).ToListAsync();
@@ -19,7 +19,7 @@ public class ProductRepository(OrdersContext context) : IProductRepository
 
     public async Task<List<Product>> GetAllAsync()
     {
-        return await this._context
+        return await _context
             .Products
             .IncludePaths("_prices")
             .ToListAsync();

@@ -16,6 +16,6 @@ internal class CorrelationMiddleware(
             context.Request.Headers.Add(CorrelationHeaderKey, correlationId.ToString());
         }
 
-        await this._next.Invoke(context);
+        await _next.Invoke(context);
     }
 }

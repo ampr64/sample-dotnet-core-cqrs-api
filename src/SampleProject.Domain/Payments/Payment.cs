@@ -22,17 +22,17 @@ public class Payment : Entity, IAggregateRoot
 
     public Payment(OrderId orderId)
     {
-        this.Id = new PaymentId(Guid.NewGuid());
-        this._createDate = DateTime.UtcNow;
-        this._orderId = orderId;
-        this._status = PaymentStatus.ToPay;
-        this._emailNotificationIsSent = false;
+        Id = new PaymentId(Guid.NewGuid());
+        _createDate = DateTime.UtcNow;
+        _orderId = orderId;
+        _status = PaymentStatus.ToPay;
+        _emailNotificationIsSent = false;
 
-        this.AddDomainEvent(new PaymentCreatedEvent(this.Id, this._orderId));
+        AddDomainEvent(new PaymentCreatedEvent(Id, _orderId));
     }
 
     public void MarkEmailNotificationIsSent()
     {
-        this._emailNotificationIsSent = true;
+        _emailNotificationIsSent = true;
     }
 }

@@ -10,7 +10,7 @@ public class CustomerUniquenessChecker(ISqlConnectionFactory sqlConnectionFactor
 
     public bool IsUnique(string customerEmail)
     {
-        var connection = this._sqlConnectionFactory.GetOpenConnection();
+        var connection = _sqlConnectionFactory.GetOpenConnection();
 
         const string sql = """
                            SELECT TOP 1 1

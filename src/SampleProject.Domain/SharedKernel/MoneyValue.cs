@@ -10,8 +10,8 @@ public class MoneyValue : ValueObject
 
     private MoneyValue(decimal value, string currency)
     {
-        this.Value = value;
-        this.Currency = currency;
+        Value = value;
+        Currency = currency;
     }
 
     public static MoneyValue Of(decimal value, string currency)

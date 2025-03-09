@@ -13,7 +13,7 @@ public class UnitOfWork(
 
     public async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
-        await this._domainEventsDispatcher.DispatchEventsAsync();
-        return await this._ordersContext.SaveChangesAsync(cancellationToken);
+        await _domainEventsDispatcher.DispatchEventsAsync();
+        return await _ordersContext.SaveChangesAsync(cancellationToken);
     }
 }

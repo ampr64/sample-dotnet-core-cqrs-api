@@ -18,7 +18,7 @@ public abstract class Entity
     /// <param name="domainEvent"></param>
     protected void AddDomainEvent(IDomainEvent domainEvent)
     {
-        this._domainEvents.Add(domainEvent);
+        _domainEvents.Add(domainEvent);
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public abstract class Entity
     /// </summary>
     public void ClearDomainEvents()
     {
-        _domainEvents?.Clear();
+        _domainEvents.Clear();
     }
 
     protected static void CheckRule(IBusinessRule rule)

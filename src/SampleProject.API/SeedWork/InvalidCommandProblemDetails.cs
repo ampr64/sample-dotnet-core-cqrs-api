@@ -7,9 +7,9 @@ public class InvalidCommandProblemDetails : ProblemDetails
 {
     public InvalidCommandProblemDetails(InvalidCommandException exception)
     {
-        this.Title = exception.Message;
-        this.Status = StatusCodes.Status400BadRequest;
-        this.Detail = exception.Details;
-        this.Type = "https://somedomain/validation-error";
+        Title = exception.Message;
+        Status = StatusCodes.Status400BadRequest;
+        Detail = exception.Details;
+        Type = "https://somedomain/validation-error";
     }
 }

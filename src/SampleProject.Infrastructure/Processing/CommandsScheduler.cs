@@ -12,7 +12,7 @@ public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICo
 
     public async Task EnqueueAsync<T>(ICommand<T> command)
     {
-        var connection = this._sqlConnectionFactory.GetOpenConnection();
+        var connection = _sqlConnectionFactory.GetOpenConnection();
 
         const string sqlInsert = """
             INSERT INTO [app].[InternalCommands]

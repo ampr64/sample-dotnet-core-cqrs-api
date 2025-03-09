@@ -19,7 +19,7 @@ public class ProductDto
 
     public ProductDto(Guid id, int quantity)
     {
-        this.Id = id;
-        this.Quantity = quantity;
+        Id = id;
+        Quantity = quantity;
     }
 }

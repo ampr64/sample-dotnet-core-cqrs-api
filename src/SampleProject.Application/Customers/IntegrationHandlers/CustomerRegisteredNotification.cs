@@ -10,12 +10,12 @@ public class CustomerRegisteredNotification : DomainNotificationBase<CustomerReg
 
     public CustomerRegisteredNotification(CustomerRegisteredEvent domainEvent) : base(domainEvent)
     {
-        this.CustomerId = domainEvent.CustomerId;
+        CustomerId = domainEvent.CustomerId;
     }
 
     [JsonConstructor]
     public CustomerRegisteredNotification(CustomerId customerId) : base(null)
     {
-        this.CustomerId = customerId;
+        CustomerId = customerId;
     }
 }

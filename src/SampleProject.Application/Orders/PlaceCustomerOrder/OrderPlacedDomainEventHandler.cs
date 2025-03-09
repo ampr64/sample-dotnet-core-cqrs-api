@@ -14,6 +14,6 @@ public class OrderPlacedDomainEventHandler(IPaymentRepository paymentRepository)
     {
         var newPayment = new Payment(notification.OrderId);
 
-        await this._paymentRepository.AddAsync(newPayment);
+        await _paymentRepository.AddAsync(newPayment);
     }
 }

@@ -17,12 +17,13 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
 
     public async Task DispatchEventsAsync()
     {
-        var domainEntities = this._ordersContext.ChangeTracker
+        var domainEntities = _ordersContext.ChangeTracker
             .Entries<Entity>()
-            .Where(x => x.Entity.DomainEvents != null && x.Entity.DomainEvents.Any()).ToList();
+            .Where(e => e.Entity.DomainEvents.Count > 0)
+            .ToList();
 
         var domainEvents = domainEntities
-            .SelectMany(x => x.Entity.DomainEvents)
+            .SelectMany(e => e.Entity.DomainEvents)
             .ToList();
 
         var domainEventNotifications = new List<IDomainEventNotification<IDomainEvent>>();
@@ -56,11 +57,11 @@ public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, Or
         {
             var type = domainEventNotification.GetType().FullName!;
             var data = JsonSerializer.Serialize(domainEventNotification);
-            OutboxMessage outboxMessage = new OutboxMessage(
+            var outboxMessage = new OutboxMessage(
                 domainEventNotification.DomainEvent.OccurredOn,
                 type,
                 data);
-            this._ordersContext.OutboxMessages.Add(outboxMessage);
+            _ordersContext.OutboxMessages.Add(outboxMessage);
         }
     }
 }

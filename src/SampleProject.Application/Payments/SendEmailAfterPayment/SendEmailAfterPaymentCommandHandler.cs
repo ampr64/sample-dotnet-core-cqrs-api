@@ -21,7 +21,7 @@ public class SendEmailAfterPaymentCommandHandler(
 
         await _emailSender.SendEmailAsync(emailMessage);
 
-        var payment = await this._paymentRepository.GetByIdAsync(request.PaymentId);
+        var payment = await _paymentRepository.GetByIdAsync(request.PaymentId);
 
         payment.MarkEmailNotificationIsSent();
 

@@ -8,7 +8,7 @@ public abstract class InternalCommandBase : ICommand
 
     protected InternalCommandBase(Guid id)
     {
-        this.Id = id;
+        Id = id;
     }
 }
 
@@ -18,11 +18,11 @@ public abstract class InternalCommandBase<TResult> : ICommand<TResult>
 
     protected InternalCommandBase()
     {
-        this.Id = Guid.NewGuid();
+        Id = Guid.NewGuid();
     }
 
     protected InternalCommandBase(Guid id)
     {
-        this.Id = id;
+        Id = id;
     }
 }

@@ -16,12 +16,12 @@ public class CommandsDispatcher(
 
     public async Task DispatchCommandAsync(Guid id)
     {
-        var internalCommand = await this._ordersContext.InternalCommands.SingleAsync(x => x.Id == id);
+        var internalCommand = await _ordersContext.InternalCommands.SingleAsync(x => x.Id == id);
         var type = Assembly.GetAssembly(typeof(MarkCustomerAsWelcomedCommand))!.GetType(internalCommand.Type)!;
         var command = JsonSerializer.Deserialize(internalCommand.Data, type)!;
 
         internalCommand.ProcessedDate = DateTime.UtcNow;
 
-        await this._mediator.Send(command);
+        await _mediator.Send(command);
     }
 }

@@ -26,10 +26,10 @@ public class OrderProduct : Entity
         string currency,
         List<ConversionRate> conversionRates)
     {
-        this.ProductId = productPrice.ProductId;
-        this.Quantity = quantity;
+        ProductId = productPrice.ProductId;
+        Quantity = quantity;
 
-        this.CalculateValue(productPrice, currency, conversionRates);
+        CalculateValue(productPrice, currency, conversionRates);
     }
 
     internal static OrderProduct CreateForProduct(
@@ -41,22 +41,22 @@ public class OrderProduct : Entity
 
     internal void ChangeQuantity(ProductPriceData productPrice, int quantity, List<ConversionRate> conversionRates)
     {
-        this.Quantity = quantity;
+        Quantity = quantity;
 
-        this.CalculateValue(productPrice, this.Value.Currency, conversionRates);
+        CalculateValue(productPrice, Value.Currency, conversionRates);
     }
 
     private void CalculateValue(ProductPriceData productPrice, string currency, List<ConversionRate> conversionRates)
     {
-        this.Value = this.Quantity * productPrice.Price;
+        Value = Quantity * productPrice.Price;
         if (currency == "EUR")
         {
-            this.ValueInEUR = this.Quantity * productPrice.Price;
+            ValueInEUR = Quantity * productPrice.Price;
         }
         else
         {
             var conversionRate = conversionRates.Single(x => x.SourceCurrency == currency && x.TargetCurrency == "EUR");
-            this.ValueInEUR = conversionRate.Convert(this.Value);
+            ValueInEUR = conversionRate.Convert(Value);
         }
     }
 }

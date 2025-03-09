@@ -34,19 +34,19 @@ internal class LoggingCommandHandlerDecorator<T>(
         {
             try
             {
-                this._logger.Information(
+                _logger.Information(
                     "Executing command {Command}",
                     command.GetType().Name);
 
                 await _decorated.Handle(command, cancellationToken);
 
-                this._logger.Information("Command {Command} processed successful", command.GetType().Name);
+                _logger.Information("Command {Command} processed successful", command.GetType().Name);
 
                 return;
             }
             catch (Exception exception)
             {
-                this._logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
+                _logger.Error(exception, "Command {Command} processing failed", command.GetType().Name);
                 throw;
             }
         }

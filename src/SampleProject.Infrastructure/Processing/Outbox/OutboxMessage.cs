@@ -19,9 +19,9 @@ public class OutboxMessage
 
     public OutboxMessage(DateTime occurredOn, string type, string data)
     {
-        this.Id = Guid.NewGuid();
-        this.OccurredOn = occurredOn;
-        this.Type = type;
-        this.Data = data;
+        Id = Guid.NewGuid();
+        OccurredOn = occurredOn;
+        Type = type;
+        Data = data;
     }
 }

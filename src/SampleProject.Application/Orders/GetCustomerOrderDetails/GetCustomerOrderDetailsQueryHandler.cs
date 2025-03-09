@@ -12,12 +12,12 @@ internal sealed class GetCustomerOrderDetailsQueryHandler : IQueryHandler<GetCus
 
     internal GetCustomerOrderDetailsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
     {
-        this._sqlConnectionFactory = sqlConnectionFactory;
+        _sqlConnectionFactory = sqlConnectionFactory;
     }
 
     public async Task<OrderDetailsDto> Handle(GetCustomerOrderDetailsQuery request, CancellationToken cancellationToken)
     {
-        var connection = this._sqlConnectionFactory.GetOpenConnection();
+        var connection = _sqlConnectionFactory.GetOpenConnection();
 
         const string sql = """
                            SELECT

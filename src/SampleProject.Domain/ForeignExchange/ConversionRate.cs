@@ -12,6 +12,6 @@ public class ConversionRate(string sourceCurrency, string targetCurrency, decima
 
     internal MoneyValue Convert(MoneyValue value)
     {
-        return this.Factor * value;
+        return Factor * value;
     }
 }

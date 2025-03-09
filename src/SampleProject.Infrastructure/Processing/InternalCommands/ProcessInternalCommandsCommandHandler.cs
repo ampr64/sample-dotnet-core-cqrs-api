@@ -13,7 +13,7 @@ internal class ProcessInternalCommandsCommandHandler(
 
     public async Task<Unit> Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
     {
-        var connection = this._sqlConnectionFactory.GetOpenConnection();
+        var connection = _sqlConnectionFactory.GetOpenConnection();
 
         const string sql = """
                            SELECT

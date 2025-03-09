@@ -24,12 +24,12 @@ public class PlaceCustomerOrderCommandHandler(
 
     public async Task<Guid> Handle(PlaceCustomerOrderCommand command, CancellationToken cancellationToken)
     {
-        var customer = await this._customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
+        var customer = await _customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
 
         var allProductPrices =
             await ProductPriceProvider.GetAllProductPrices(_sqlConnectionFactory.GetOpenConnection());
 
-        var conversionRates = this._foreignExchange.GetConversionRates();
+        var conversionRates = _foreignExchange.GetConversionRates();
 
         var orderProductsData = command
             .Products

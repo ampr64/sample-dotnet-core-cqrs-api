@@ -11,24 +11,24 @@ public class SqlConnectionFactory(string connectionString) : ISqlConnectionFacto
     private SqlConnection? _connection;
 
     [MemberNotNullWhen(true, nameof(_connection))]
-    private bool IsConnectionOpen => this._connection is { State: ConnectionState.Open };
+    private bool IsConnectionOpen => _connection is { State: ConnectionState.Open };
 
     public IDbConnection GetOpenConnection()
     {
         if (!IsConnectionOpen)
         {
-            this._connection = new SqlConnection(_connectionString);
-            this._connection.Open();
+            _connection = new SqlConnection(_connectionString);
+            _connection.Open();
         }
 
-        return this._connection;
+        return _connection;
     }
 
     public void Dispose()
     {
         if (IsConnectionOpen)
         {
-            this._connection.Dispose();
+            _connection.Dispose();
         }
 
         GC.SuppressFinalize(this);

@@ -34,8 +34,8 @@ public class Order : Entity
         List<ConversionRate> conversionRates
         )
     {
-        this._orderDate = SystemClock.Now;
-        this.Id = new OrderId(Guid.NewGuid());
+        _orderDate = SystemClock.Now;
+        Id = new OrderId(Guid.NewGuid());
 
         foreach (var orderProductData in orderProductsData)
         {
@@ -50,8 +50,8 @@ public class Order : Entity
             _orderProducts.Add(orderProduct);
         }
 
-        this.CalculateOrderValue();
-        this._status = OrderStatus.Placed;
+        CalculateOrderValue();
+        _status = OrderStatus.Placed;
     }
 
     internal static Order CreateNew(List<OrderProductData> orderProductsData,
@@ -76,14 +76,14 @@ public class Order : Entity
             var existingProductOrder = _orderProducts.SingleOrDefault(x => x.ProductId == orderProductData.ProductId);
             if (existingProductOrder != null)
             {
-                var existingOrderProduct = this._orderProducts.Single(x => x.ProductId == existingProductOrder.ProductId);
+                var existingOrderProduct = _orderProducts.Single(x => x.ProductId == existingProductOrder.ProductId);
                 
                 existingOrderProduct.ChangeQuantity(product, orderProductData.Quantity, conversionRates);
             }
             else
             {
                 var orderProduct = OrderProduct.CreateForProduct(product, orderProductData.Quantity, currency, conversionRates);
-                this._orderProducts.Add(orderProduct);
+                _orderProducts.Add(orderProduct);
             }
         }
 
@@ -93,23 +93,23 @@ public class Order : Entity
             var product = orderProductsData.SingleOrDefault(x => x.ProductId == existingProduct.ProductId);
             if (product == null)
             {
-                this._orderProducts.Remove(existingProduct);
+                _orderProducts.Remove(existingProduct);
             }
         }
 
-        this.CalculateOrderValue();
+        CalculateOrderValue();
 
-        this._orderChangeDate = DateTime.UtcNow;
+        _orderChangeDate = DateTime.UtcNow;
     }
 
     internal void Remove()
     {
-        this._isRemoved = true;
+        _isRemoved = true;
     }
 
     internal bool IsOrderedToday()
     {
-       return this._orderDate.Date == SystemClock.Now.Date;
+       return _orderDate.Date == SystemClock.Now.Date;
     }
 
     internal MoneyValue GetValue()

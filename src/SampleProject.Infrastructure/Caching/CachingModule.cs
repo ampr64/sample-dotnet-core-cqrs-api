@@ -10,7 +10,7 @@ public class CachingModule(Dictionary<string, TimeSpan> expirationConfiguration)
     {
         builder.RegisterType<MemoryCacheStore>()
             .As<ICacheStore>()
-            .WithParameter("expirationConfiguration", this._expirationConfiguration)
+            .WithParameter("expirationConfiguration", _expirationConfiguration)
             .SingleInstance();
     }
 }
