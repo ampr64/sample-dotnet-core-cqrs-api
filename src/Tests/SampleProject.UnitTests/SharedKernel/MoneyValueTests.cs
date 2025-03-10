@@ -7,51 +7,59 @@ namespace SampleProject.UnitTests.SharedKernel;
 [TestFixture]
 public class MoneyValueTests : TestBase
 {
-    [Test]
-    public void MoneyValueOf_WhenCurrencyIsProvided_IsSuccessful()
+    [TestCaseSource(nameof(CurrencyCases))]
+    public void MoneyValueOf_WhenCurrencyIsProvided_IsSuccessful(Currency currency)
     {
-        var value = MoneyValue.Of(120, "EUR");
+        var value = MoneyValue.Of(120, currency);
 
         Assert.That(value.Value, Is.EqualTo(120));
-        Assert.That(value.Currency, Is.EqualTo("EUR"));
+        Assert.That(value.Currency, Is.EqualTo(currency));
     }
 
-    [Test]
-    public void MoneyValueOf_WhenCurrencyIsNotProvided_ThrowsMoneyValueMustHaveCurrencyRuleBroken()
+    [TestCase(null)]
+    [TestCase("")]
+    public void MoneyValueOf_WhenCurrencyIsNotProvided_ThrowsMoneyValueMustHaveCurrencyRuleBroken(string? currency)
     {
         AssertBrokenRule<MoneyValueMustHaveCurrencyRule>(() =>
         {
-            MoneyValue.Of(120, "");
+            MoneyValue.Of(120, currency!);
+        });
+    }
+    
+    [TestCase("PLN")]
+    [TestCase("ARS")]
+    public void MoneyValueOf_WhenCurrencyIsNotSupported_ThrowsCurrencyMustBeSupportedRuleBroken(string currency)
+    {
+        AssertBrokenRule<CurrencyMustBeSupportedRule>(() =>
+        {
+            MoneyValue.Of(120, currency);
         });
     }
 
-    [Test]
-    public void GivenTwoMoneyValuesWithTheSameCurrencies_WhenAddThem_IsSuccessful()
+    [TestCaseSource(nameof(CurrencyCases))]
+    public void GivenTwoMoneyValuesWithTheSameCurrencies_WhenAddThem_IsSuccessful(Currency currency)
     {
-        var valueInEuros = MoneyValue.Of(100, "EUR");
-        var valueInEuros2 = MoneyValue.Of(50, "EUR");
+        var valueA = MoneyValue.Of(100, currency);
+        var valueB = MoneyValue.Of(50, currency);
 
-        MoneyValue add = valueInEuros + valueInEuros2;
+        var sum = valueA + valueB;
 
-        Assert.That(add.Value, Is.EqualTo(150));
-        Assert.That(add.Currency, Is.EqualTo("EUR"));
+        Assert.That(sum.Value, Is.EqualTo(150));
+        Assert.That(sum.Currency, Is.EqualTo(currency));
     }
 
-    [Test]
-    public void GivenTwoMoneyValuesWithTheSameCurrencies_SumThem_IsSuccessful()
+    [TestCaseSource(nameof(CurrencyCases))]
+    public void GivenTwoMoneyValuesWithTheSameCurrencies_SumThem_IsSuccessful(Currency currency)
     {
-        var valueInEuros = MoneyValue.Of(100, "EUR");
-        var valueInEuros2 = MoneyValue.Of(50, "EUR");
+        var valueInEuros = MoneyValue.Of(100, currency);
+        var valueInEuros2 = MoneyValue.Of(50, currency);
 
-        var values = new List<MoneyValue>
-        {
-            valueInEuros, valueInEuros2
-        };
+        List<MoneyValue> values = [valueInEuros, valueInEuros2];
 
-        MoneyValue add = values.Sum();
+        var sum = values.Sum();
 
-        Assert.That(add.Value, Is.EqualTo(150));
-        Assert.That(add.Currency, Is.EqualTo("EUR"));
+        Assert.That(sum.Value, Is.EqualTo(150));
+        Assert.That(sum.Currency, Is.EqualTo(currency));
     }
 
     [Test]
@@ -64,4 +72,7 @@ public class MoneyValueTests : TestBase
             var add = valueInEuros + valueInDollars;
         });
     }
+
+    private static readonly Currency[] CurrencyCases =
+        [Currency.UsDollar, Currency.Euro];
 }

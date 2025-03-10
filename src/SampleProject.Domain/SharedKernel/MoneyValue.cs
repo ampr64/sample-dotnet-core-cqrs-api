@@ -6,17 +6,18 @@ public class MoneyValue : ValueObject
 {
     public decimal Value { get; }
 
-    public string Currency { get; }
+    public Currency Currency { get; }
 
-    private MoneyValue(decimal value, string currency)
+    private MoneyValue(decimal value, Currency currency)
     {
         Value = value;
         Currency = currency;
     }
 
-    public static MoneyValue Of(decimal value, string currency)
+    public static MoneyValue Of(decimal value, string currencyCode)
     {
-        CheckRule(new MoneyValueMustHaveCurrencyRule(currency));
+        CheckRule(new MoneyValueMustHaveCurrencyRule(currencyCode));
+        var currency = Currency.Of(currencyCode);
 
         return new MoneyValue(value, currency);
     }
