@@ -1,18 +1,17 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using SampleProject.Application.Configuration.Commands;
+﻿using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Orders.PlaceCustomerOrder;
 using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.ForeignExchange;
 using SampleProject.Domain.Products;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Orders.ChangeCustomerOrder;
 
-internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<ChangeCustomerOrderCommand,Unit>
+internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<ChangeCustomerOrderCommand>
 {
     private readonly ICustomerRepository _customerRepository;
 
@@ -30,7 +29,7 @@ internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<Change
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
-    public async Task<Unit> Handle(ChangeCustomerOrderCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ChangeCustomerOrderCommand request, CancellationToken cancellationToken)
     {
         var customer = await _customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
 
@@ -51,7 +50,5 @@ internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<Change
             orderProducts, 
             conversionRates, 
             request.Currency);
-
-        return Unit.Value;
     }
 }

@@ -10,13 +10,13 @@ using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing.Outbox;
 
-internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessOutboxCommand, Unit>
+internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessOutboxCommand>
 {
     private readonly IMediator _mediator = mediator;
 
     private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
-    public async Task<Unit> Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
+    public async Task Handle(ProcessOutboxCommand command, CancellationToken cancellationToken)
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
         const string sql = """
@@ -55,8 +55,6 @@ internal class ProcessOutboxCommandHandler(IMediator mediator, ISqlConnectionFac
                 }
             }
         }
-
-        return Unit.Value;
     }
 
     private class OutboxMessageContextEnricher(IDomainEventNotification notification) : ILogEventEnricher

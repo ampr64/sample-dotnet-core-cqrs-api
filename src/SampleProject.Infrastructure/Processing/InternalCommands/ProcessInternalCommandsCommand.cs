@@ -4,7 +4,4 @@ using SampleProject.Infrastructure.Processing.Outbox;
 
 namespace SampleProject.Infrastructure.Processing.InternalCommands;
 
-internal class ProcessInternalCommandsCommand : CommandBase<Unit>, IRecurringCommand
-{
-
-}
+internal record ProcessInternalCommandsCommand : CommandBase, IRecurringCommand;

@@ -22,7 +22,9 @@ public class UnitOfWorkCommandHandlerWithResultDecorator<T, TResult>(
 
         if (command is InternalCommandBase<TResult>)
         {
-            var internalCommand = await _ordersContext.InternalCommands.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken: cancellationToken);
+            var internalCommand =
+                await _ordersContext.InternalCommands.FirstOrDefaultAsync(x => x.Id == command.Id,
+                cancellationToken);
 
             if (internalCommand != null)
             {

@@ -4,7 +4,4 @@ using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrders;
 
-public class GetCustomerOrdersQuery(Guid customerId) : IQuery<List<OrderDto>>
-{
-    public Guid CustomerId { get; } = customerId;
-}
+public record GetCustomerOrdersQuery(Guid CustomerId) : IQuery<List<OrderDto>>;

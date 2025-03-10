@@ -7,11 +7,11 @@ using System.Text.Json;
 namespace SampleProject.Infrastructure.Processing.InternalCommands;
 
 internal class ProcessInternalCommandsCommandHandler(
-    ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessInternalCommandsCommand, Unit>
+    ISqlConnectionFactory sqlConnectionFactory) : ICommandHandler<ProcessInternalCommandsCommand>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
-    public async Task<Unit> Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
+    public async Task Handle(ProcessInternalCommandsCommand command, CancellationToken cancellationToken)
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
 
@@ -22,6 +22,7 @@ internal class ProcessInternalCommandsCommandHandler(
                            FROM [app].[InternalCommands] AS [Command]
                            WHERE [Command].[ProcessedDate] IS NULL
                            """;
+
         var commands = await connection.QueryAsync<InternalCommandDto>(sql);
 
         var internalCommandsList = commands.AsList();
@@ -33,14 +34,7 @@ internal class ProcessInternalCommandsCommandHandler(
 
             await CommandsExecutor.Execute(commandToProcess);
         }
-
-        return Unit.Value;
     }
 
-    private class InternalCommandDto
-    {
-        public string Type { get; set; } = null!;
-
-        public string Data { get; set; } = null!;
-    }
+    private record InternalCommandDto(string Type, string Data);
 }

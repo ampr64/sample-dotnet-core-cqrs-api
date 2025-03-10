@@ -42,7 +42,7 @@ internal sealed class GetCustomerOrderDetailsQueryHandler : IQueryHandler<GetCus
             """;
         var products = await connection.QueryAsync<ProductDto>(sqlProducts, new { request.OrderId });
 
-        order.Products = products.AsList();
+        order = order with { Products = products.AsList() };
 
         return order;
     }

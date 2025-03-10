@@ -24,6 +24,6 @@ public class RegisterCustomerCommandHandler(
 
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return new CustomerDto { Id = customer.Id.Value };
+        return new CustomerDto(customer.Id.Value);
     }
 }

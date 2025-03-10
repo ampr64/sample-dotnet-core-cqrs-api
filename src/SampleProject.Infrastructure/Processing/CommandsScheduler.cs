@@ -10,7 +10,13 @@ public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICo
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory = sqlConnectionFactory;
 
+    public async Task EnqueueAsync(ICommand command)
+        => await EnqueueAsyncCore(command);
+
     public async Task EnqueueAsync<T>(ICommand<T> command)
+        => await EnqueueAsyncCore(command);
+
+    private async Task EnqueueAsyncCore(object command)
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
 
@@ -20,11 +26,14 @@ public class CommandsScheduler(ISqlConnectionFactory sqlConnectionFactory) : ICo
             (@Id, @EnqueueDate, @Type, @Data)
             """;
 
+        var commandType = command.GetType();
+        var id = commandType.GetProperty(nameof(ICommand.Id))?.GetValue(command);
+
         await connection.ExecuteAsync(sqlInsert, new
         {
-            command.Id,
+            Id = id,
             EnqueueDate = DateTime.UtcNow,
-            Type = command.GetType().FullName,
+            Type = commandType.FullName,
             Data = JsonSerializer.Serialize(command)
         });
     }

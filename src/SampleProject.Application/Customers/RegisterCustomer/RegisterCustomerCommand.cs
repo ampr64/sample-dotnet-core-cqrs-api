@@ -2,9 +2,4 @@
 
 namespace SampleProject.Application.Customers.RegisterCustomer;
 
-public class RegisterCustomerCommand(string email, string name) : CommandBase<CustomerDto>
-{
-    public string Email { get; } = email;
-
-    public string Name { get; } = name;
-}
+public record RegisterCustomerCommand(string Email, string Name) : CommandBase<CustomerDto>;

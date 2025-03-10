@@ -8,7 +8,7 @@ namespace SampleProject.Infrastructure.Processing;
 public class UnitOfWorkCommandHandlerDecorator<T>(
     ICommandHandler<T> decorated,
     IUnitOfWork unitOfWork,
-    OrdersContext ordersContext) : ICommandHandler<T> where T:ICommand
+    OrdersContext ordersContext) : ICommandHandler<T> where T : ICommand
 {
     private readonly ICommandHandler<T> _decorated = decorated;
 
@@ -24,7 +24,7 @@ public class UnitOfWorkCommandHandlerDecorator<T>(
         {
             var internalCommand =
                 await _ordersContext.InternalCommands.FirstOrDefaultAsync(x => x.Id == command.Id,
-                    cancellationToken: cancellationToken);
+                    cancellationToken);
 
             if (internalCommand != null)
             {
