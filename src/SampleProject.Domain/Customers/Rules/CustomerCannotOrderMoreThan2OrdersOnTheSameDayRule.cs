@@ -5,12 +5,7 @@ namespace SampleProject.Domain.Customers.Rules;
 
 public class CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(IList<Order> orders) : IBusinessRule
 {
-    private readonly IList<Order> _orders = orders;
+    public bool IsBroken() => orders.Count(x => x.IsOrderedToday()) >= 2;
 
-    public bool IsBroken()
-    {
-       return _orders.Count(x => x.IsOrderedToday()) >= 2;
-    }
-
-    public string Message => "You cannot order more than 2 orders on the same day.";
+    public string Message => "You cannot order more than twice on the same day.";
 }
