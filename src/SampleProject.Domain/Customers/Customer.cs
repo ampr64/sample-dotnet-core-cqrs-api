@@ -9,11 +9,11 @@ namespace SampleProject.Domain.Customers;
 
 public class Customer : Entity, IAggregateRoot
 {
-    public CustomerId Id { get; private set; }
+    public CustomerId Id { get; private init; }
 
-    private string _email;
+    private string _email = null!;
 
-    private string _name;
+    private string _name = null!;
 
     private readonly List<Order> _orders = [];
 
@@ -38,6 +38,8 @@ public class Customer : Entity, IAggregateRoot
         string name,
         ICustomerUniquenessChecker customerUniquenessChecker)
     {
+        CheckRule(new CustomerMustHaveAnEmailRule(email));
+        CheckRule(new CustomerMustHaveANameRule(name));
         CheckRule(new CustomerEmailMustBeUniqueRule(customerUniquenessChecker, email));
 
         return new Customer(email, name);
