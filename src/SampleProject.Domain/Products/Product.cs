@@ -12,6 +12,5 @@ public class Product : Entity, IAggregateRoot
 
     private Product()
     {
-
     }
 }

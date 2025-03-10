@@ -2,7 +2,4 @@
 
 namespace SampleProject.Domain.Customers.Orders.Events;
 
-public class OrderRemovedEvent(OrderId orderId) : DomainEventBase
-{
-    public OrderId OrderId { get; } = orderId;
-}
+public record OrderRemovedEvent(OrderId OrderId) : IDomainEvent;

@@ -4,5 +4,5 @@ namespace SampleProject.Domain.SeedWork;
 
 public interface IDomainEvent : INotification
 {
-    DateTime OccurredOn { get; }
+    DateTime OccurredOn => DateTime.UtcNow;
 }
