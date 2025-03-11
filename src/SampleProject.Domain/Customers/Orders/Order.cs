@@ -11,9 +11,9 @@ public class Order : Entity
 
     private bool _isRemoved;
 
-    private MoneyValue _value;
+    private MoneyValue _value = null!;
 
-    private MoneyValue _valueInEUR;
+    private MoneyValue _valueInEUR = null!;
 
     private readonly List<OrderProduct> _orderProducts = [];
 
@@ -27,12 +27,10 @@ public class Order : Entity
     {
     }
 
-    private Order(
-        List<OrderProductData> orderProductsData,
-        List<ProductPriceData> productPrices,
-        string currency, 
-        List<ConversionRate> conversionRates
-        )
+    private Order(IEnumerable<OrderProductData> orderProductsData,
+        IEnumerable<ProductPriceData> productPrices,
+        Currency currency,
+        IEnumerable<ConversionRate> conversionRates)
     {
         _orderDate = SystemClock.Now;
         Id = new OrderId(Guid.NewGuid());
@@ -42,9 +40,9 @@ public class Order : Entity
             var productPrice = productPrices.Single(x => x.ProductId == orderProductData.ProductId &&
                                                          x.Price.Currency == currency);
             var orderProduct = OrderProduct.CreateForProduct(
-                productPrice, 
+                productPrice,
                 orderProductData.Quantity,
-                currency, 
+                currency,
                 conversionRates);
 
             _orderProducts.Add(orderProduct);
@@ -54,30 +52,30 @@ public class Order : Entity
         _status = OrderStatus.Placed;
     }
 
-    internal static Order CreateNew(List<OrderProductData> orderProductsData,
-        List<ProductPriceData> allProductPrices,
-        string currency,
-        List<ConversionRate> conversionRates)
+    internal static Order CreateNew(IReadOnlyList<OrderProductData> orderProductsData,
+        IReadOnlyList<ProductPriceData> allProductPrices,
+        Currency currency,
+        IReadOnlyList<ConversionRate> conversionRates)
     {
         return new Order(orderProductsData, allProductPrices, currency, conversionRates);
     }
 
     internal void Change(
-        List<ProductPriceData> allProductPrices,
-        List<OrderProductData> orderProductsData, 
-        List<ConversionRate> conversionRates,
-        string currency)
+        IReadOnlyList<ProductPriceData> allProductPrices,
+        IReadOnlyList<OrderProductData> orderProductsData,
+        IReadOnlyList<ConversionRate> conversionRates,
+        Currency currency)
     {
         foreach (var orderProductData in orderProductsData)
         {
             var product = allProductPrices.Single(x => x.ProductId == orderProductData.ProductId &&
                                                        x.Price.Currency == currency);
-            
+
             var existingProductOrder = _orderProducts.SingleOrDefault(x => x.ProductId == orderProductData.ProductId);
             if (existingProductOrder != null)
             {
                 var existingOrderProduct = _orderProducts.Single(x => x.ProductId == existingProductOrder.ProductId);
-                
+
                 existingOrderProduct.ChangeQuantity(product, orderProductData.Quantity, conversionRates);
             }
             else
@@ -109,7 +107,7 @@ public class Order : Entity
 
     internal bool IsOrderedToday()
     {
-       return _orderDate.Date == SystemClock.Now.Date;
+        return _orderDate.Date == SystemClock.Now.Date;
     }
 
     internal MoneyValue GetValue()

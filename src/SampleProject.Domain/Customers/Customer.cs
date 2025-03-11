@@ -4,6 +4,7 @@ using SampleProject.Domain.Customers.Rules;
 using SampleProject.Domain.ForeignExchange;
 using SampleProject.Domain.Products;
 using SampleProject.Domain.SeedWork;
+using SampleProject.Domain.SharedKernel;
 
 namespace SampleProject.Domain.Customers;
 
@@ -22,7 +23,7 @@ public class Customer : Entity, IAggregateRoot
     private Customer()
     {
     }
-     
+
     private Customer(string email, string name)
     {
         Id = new CustomerId(Guid.NewGuid());
@@ -34,7 +35,7 @@ public class Customer : Entity, IAggregateRoot
     }
 
     public static Customer CreateRegistered(
-        string email, 
+        string email,
         string name,
         ICustomerUniquenessChecker customerUniquenessChecker)
     {
@@ -46,15 +47,15 @@ public class Customer : Entity, IAggregateRoot
     }
 
     public OrderId PlaceOrder(
-        List<OrderProductData> orderProductsData,
-        List<ProductPriceData> allProductPrices,
-        string currency, 
-        List<ConversionRate> conversionRates)
+        IReadOnlyList<OrderProductData> orderProductsData,
+        IReadOnlyList<ProductPriceData> allProductPrices,
+        string currency,
+        IReadOnlyList<ConversionRate> conversionRates)
     {
         CheckRule(new CustomerCannotOrderMoreThanTwiceADayRule(_orders));
         CheckRule(new OrderMustHaveAtLeastOneProductRule(orderProductsData));
 
-        var order = Order.CreateNew(orderProductsData, allProductPrices, currency, conversionRates);
+        var order = Order.CreateNew(orderProductsData, allProductPrices, Currency.Of(currency), conversionRates);
 
         _orders.Add(order);
 
@@ -63,17 +64,16 @@ public class Customer : Entity, IAggregateRoot
         return order.Id;
     }
 
-    public void ChangeOrder(
-        OrderId orderId, 
-        List<ProductPriceData> existingProducts,
-        List<OrderProductData> newOrderProductsData,
-        List<ConversionRate> conversionRates,
+    public void ChangeOrder(OrderId orderId,
+        IReadOnlyList<ProductPriceData> existingProducts,
+        IReadOnlyList<OrderProductData> newOrderProductsData,
+        IReadOnlyList<ConversionRate> conversionRates,
         string currency)
     {
         CheckRule(new OrderMustHaveAtLeastOneProductRule(newOrderProductsData));
 
         var order = _orders.Single(x => x.Id == orderId);
-        order.Change(existingProducts, newOrderProductsData, conversionRates, currency);
+        order.Change(existingProducts, newOrderProductsData, conversionRates, Currency.Of(currency));
 
         AddDomainEvent(new OrderChangedEvent(orderId));
     }
@@ -86,8 +86,5 @@ public class Customer : Entity, IAggregateRoot
         AddDomainEvent(new OrderRemovedEvent(orderId));
     }
 
-    public void MarkAsWelcomedByEmail()
-    {
-        _welcomeEmailWasSent = true;
-    }
+    public void MarkAsWelcomedByEmail() => _welcomeEmailWasSent = true;
 }

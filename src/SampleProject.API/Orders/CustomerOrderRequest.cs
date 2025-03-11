@@ -2,4 +2,4 @@
 
 namespace SampleProject.API.Orders;
 
-public record CustomerOrderRequest(List<ProductDto> Products, string Currency);
+public record CustomerOrderRequest(IReadOnlyList<ProductDto> Products, string Currency);

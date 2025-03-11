@@ -1,11 +1,11 @@
-﻿using System.Net;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SampleProject.Application.Orders.ChangeCustomerOrder;
 using SampleProject.Application.Orders.GetCustomerOrderDetails;
 using SampleProject.Application.Orders.GetCustomerOrders;
 using SampleProject.Application.Orders.PlaceCustomerOrder;
 using SampleProject.Application.Orders.RemoveCustomerOrder;
+using System.Net;
 
 namespace SampleProject.API.Orders;
 
@@ -22,7 +22,7 @@ public class CustomerOrdersController(IMediator mediator) : Controller
     /// <returns>List of customer orders.</returns>
     [Route("{customerId}/orders")]
     [HttpGet]
-    [ProducesResponseType(typeof(List<OrderDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<OrderDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetCustomerOrders(Guid customerId)
     {
         var orders = await _mediator.Send(new GetCustomerOrdersQuery(customerId));
@@ -38,7 +38,7 @@ public class CustomerOrdersController(IMediator mediator) : Controller
     [HttpGet]
     [ProducesResponseType(typeof(OrderDetailsDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetCustomerOrderDetails(
-        [FromRoute]Guid orderId)
+        [FromRoute] Guid orderId)
     {
         var orderDetails = await _mediator.Send(new GetCustomerOrderDetailsQuery(orderId));
 
@@ -55,12 +55,12 @@ public class CustomerOrdersController(IMediator mediator) : Controller
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
     public async Task<IActionResult> AddCustomerOrder(
-        [FromRoute]Guid customerId, 
-        [FromBody]CustomerOrderRequest request)
+        [FromRoute] Guid customerId,
+        [FromBody] CustomerOrderRequest request)
     {
-       await _mediator.Send(new PlaceCustomerOrderCommand(customerId, request.Products, request.Currency));
+        await _mediator.Send(new PlaceCustomerOrderCommand(customerId, request.Products, request.Currency));
 
-       return Created(string.Empty, null);
+        return Created(string.Empty, null);
     }
 
     /// <summary>
@@ -73,9 +73,9 @@ public class CustomerOrdersController(IMediator mediator) : Controller
     [HttpPut]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> ChangeCustomerOrder(
-        [FromRoute]Guid customerId, 
-        [FromRoute]Guid orderId,
-        [FromBody]CustomerOrderRequest request)
+        [FromRoute] Guid customerId,
+        [FromRoute] Guid orderId,
+        [FromBody] CustomerOrderRequest request)
     {
         await _mediator.Send(new ChangeCustomerOrderCommand(customerId, orderId, request.Products, request.Currency));
 
@@ -89,10 +89,10 @@ public class CustomerOrdersController(IMediator mediator) : Controller
     /// <param name="orderId">Order ID.</param>
     [Route("{customerId}/orders/{orderId}")]
     [HttpDelete]
-    [ProducesResponseType(typeof(List<OrderDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<OrderDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> RemoveCustomerOrder(
-        [FromRoute]Guid customerId,
-        [FromRoute]Guid orderId)
+        [FromRoute] Guid customerId,
+        [FromRoute] Guid orderId)
     {
         await _mediator.Send(new RemoveCustomerOrderCommand(customerId, orderId));
 

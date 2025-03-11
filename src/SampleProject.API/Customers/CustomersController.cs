@@ -1,8 +1,8 @@
-﻿using System.Net;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SampleProject.Application.Customers;
 using SampleProject.Application.Customers.RegisterCustomer;
+using System.Net;
 
 namespace SampleProject.API.Customers;
 
@@ -18,10 +18,10 @@ public class CustomersController(IMediator mediator) : Controller
     [Route("")]
     [HttpPost]
     [ProducesResponseType(typeof(CustomerDto), (int)HttpStatusCode.Created)]
-    public async Task<IActionResult> RegisterCustomer([FromBody]RegisterCustomerRequest request)
+    public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequest request)
     {
-       var customer = await _mediator.Send(new RegisterCustomerCommand(request.Email, request.Name));
+        var customer = await _mediator.Send(new RegisterCustomerCommand(request.Email, request.Name));
 
-       return Created(string.Empty, customer);
-    }       
+        return Created(string.Empty, customer);
+    }
 }

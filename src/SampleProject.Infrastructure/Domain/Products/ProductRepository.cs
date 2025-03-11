@@ -9,15 +9,16 @@ public class ProductRepository(OrdersContext context) : IProductRepository
 {
     private readonly OrdersContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-    public async Task<List<Product>> GetByIdsAsync(List<ProductId> ids)
+    public async Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<ProductId> ids)
     {
         return await _context
             .Products
             .IncludePaths("_prices")
-            .Where(x => ids.Contains(x.Id)).ToListAsync();
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync();
     }
 
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<IReadOnlyList<Product>> GetAllAsync()
     {
         return await _context
             .Products

@@ -2,5 +2,5 @@
 
 public interface IForeignExchange
 {
-    List<ConversionRate> GetConversionRates();
+    IReadOnlyList<ConversionRate> GetConversionRates();
 }

@@ -1,4 +1,5 @@
 ﻿using SampleProject.Domain.ForeignExchange;
+using SampleProject.Domain.SharedKernel;
 using SampleProject.Infrastructure.Caching;
 
 namespace SampleProject.Infrastructure.Domain.ForeignExchanges;
@@ -7,7 +8,7 @@ public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
 {
     private readonly ICacheStore _cacheStore = cacheStore;
 
-    public List<ConversionRate> GetConversionRates()
+    public IReadOnlyList<ConversionRate> GetConversionRates()
     {
         var ratesCache = _cacheStore.Get(new ConversionRatesCacheKey());
 
@@ -18,7 +19,7 @@ public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
 
         var rates = GetConversionRatesFromExternalApi();
 
-        _cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.Now.Date.AddDays(1));
+        _cacheStore.Add(new ConversionRatesCache(rates), new ConversionRatesCacheKey(), DateTime.UtcNow.Date.AddDays(1));
 
         return rates;
     }
@@ -27,11 +28,11 @@ public class ForeignExchange(ICacheStore cacheStore) : IForeignExchange
     {
         // Communication with external API. Here is only mock.
 
-        var conversionRates = new List<ConversionRate>
-        {
-            new("USD", "EUR", (decimal)0.88),
-            new("EUR", "USD", (decimal)1.13)
-        };
+        List<ConversionRate> conversionRates =
+        [
+            new(Currency.UsDollar, Currency.Euro, (decimal)0.88),
+            new(Currency.Euro, Currency.UsDollar, (decimal)1.13)
+        ];
 
         return conversionRates;
     }

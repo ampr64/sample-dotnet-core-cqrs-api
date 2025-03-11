@@ -5,5 +5,5 @@ using SampleProject.Application.Configuration.Commands;
 namespace SampleProject.Application.Orders.PlaceCustomerOrder;
 
 public record PlaceCustomerOrderCommand(Guid CustomerId,
-    List<ProductDto> Products,
+    IReadOnlyList<ProductDto> Products,
     string Currency) : CommandBase<Guid>;

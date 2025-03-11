@@ -6,5 +6,5 @@ namespace SampleProject.Application.Orders.ChangeCustomerOrder;
 
 public record ChangeCustomerOrderCommand(Guid CustomerId,
     Guid OrderId,
-    List<ProductDto> Products,
+    IReadOnlyList<ProductDto> Products,
     string Currency) : CommandBase;

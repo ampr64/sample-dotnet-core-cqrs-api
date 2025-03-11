@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using FluentValidation;
+using MediatR;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation;
-using MediatR;
 
 namespace SampleProject.Application.Configuration.Validation;
 
-public class CommandValidationBehavior<TRequest, TResponse>(IList<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+public class CommandValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
 {
-    private readonly IList<IValidator<TRequest>> _validators = validators;
+    private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
 
     public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
@@ -20,7 +20,7 @@ public class CommandValidationBehavior<TRequest, TResponse>(IList<IValidator<TRe
         .Where(error => error != null)
         .ToList();
 
-        if (errors.Any())
+        if (errors.Count > 0)
         {
             var errorBuilder = new StringBuilder();
 

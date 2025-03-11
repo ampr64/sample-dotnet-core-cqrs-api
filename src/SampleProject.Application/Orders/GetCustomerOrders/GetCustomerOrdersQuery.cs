@@ -4,4 +4,4 @@ using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrders;
 
-public record GetCustomerOrdersQuery(Guid CustomerId) : IQuery<List<OrderDto>>;
+public record GetCustomerOrdersQuery(Guid CustomerId) : IQuery<IReadOnlyList<OrderDto>>;

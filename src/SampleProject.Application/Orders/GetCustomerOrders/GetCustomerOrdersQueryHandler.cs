@@ -7,7 +7,7 @@ using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrders;
 
-internal sealed class GetCustomerOrdersQueryHandler : IQueryHandler<GetCustomerOrdersQuery, List<OrderDto>>
+internal sealed class GetCustomerOrdersQueryHandler : IQueryHandler<GetCustomerOrdersQuery, IReadOnlyList<OrderDto>>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -16,7 +16,7 @@ internal sealed class GetCustomerOrdersQueryHandler : IQueryHandler<GetCustomerO
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
-    public async Task<List<OrderDto>> Handle(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<OrderDto>> Handle(GetCustomerOrdersQuery request, CancellationToken cancellationToken)
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
         const string sql = """

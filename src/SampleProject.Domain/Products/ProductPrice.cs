@@ -4,10 +4,9 @@ namespace SampleProject.Domain.Products;
 
 public class ProductPrice
 {
-    public MoneyValue Value { get; private set; }
+    public required MoneyValue Value { get; init; }
 
     private ProductPrice()
-    {
-        
+    {        
     }
 }

@@ -2,7 +2,7 @@
 
 public interface IProductRepository
 {
-    Task<List<Product>> GetByIdsAsync(List<ProductId> ids);
+    Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<ProductId> ids);
 
-    Task<List<Product>> GetAllAsync();
+    Task<IReadOnlyList<Product>> GetAllAsync();
 }

@@ -2,7 +2,7 @@
 
 namespace SampleProject.Infrastructure.Domain.ForeignExchanges;
 
-public class ConversionRatesCache(List<ConversionRate> rates)
+public class ConversionRatesCache(IReadOnlyList<ConversionRate> rates)
 {
-    public List<ConversionRate> Rates { get; } = rates;
+    public IReadOnlyList<ConversionRate> Rates { get; } = rates;
 }

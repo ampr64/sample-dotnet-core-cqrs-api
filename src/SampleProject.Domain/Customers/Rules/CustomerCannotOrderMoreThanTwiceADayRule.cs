@@ -3,7 +3,7 @@ using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.Domain.Customers.Rules;
 
-public class CustomerCannotOrderMoreThanTwiceADayRule(IList<Order> orders) : IBusinessRule
+public class CustomerCannotOrderMoreThanTwiceADayRule(IEnumerable<Order> orders) : IBusinessRule
 {
     public bool IsBroken() => orders.Count(x => x.IsOrderedToday()) >= 2;
 
