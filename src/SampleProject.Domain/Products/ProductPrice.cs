@@ -7,6 +7,6 @@ public class ProductPrice
     public required MoneyValue Value { get; init; }
 
     private ProductPrice()
-    {        
+    {
     }
 }

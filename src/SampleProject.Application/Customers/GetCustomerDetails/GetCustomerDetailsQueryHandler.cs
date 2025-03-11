@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Application.Configuration.Queries;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Customers.GetCustomerDetails;
 

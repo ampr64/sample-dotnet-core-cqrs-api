@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SampleProject.Domain.Customers.Orders.Events;
 using SampleProject.Domain.Payments;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder;
 

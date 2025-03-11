@@ -19,7 +19,7 @@ public class CustomerRepository(OrdersContext context) : ICustomerRepository
     {
         return await _context.Customers
             .IncludePaths(
-                CustomerEntityTypeConfiguration.OrdersList, 
+                CustomerEntityTypeConfiguration.OrdersList,
                 CustomerEntityTypeConfiguration.OrderProducts)
             .SingleAsync(x => x.Id == id);
     }

@@ -12,7 +12,7 @@ internal sealed class PaymentEntityTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder.ToTable("Payments", SchemaNames.Payments);
-        
+
         builder.HasKey(b => b.Id);
 
         builder.Property<DateTime>("_createDate").HasColumnName("CreateDate");

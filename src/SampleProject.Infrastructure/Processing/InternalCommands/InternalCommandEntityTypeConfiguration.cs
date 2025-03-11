@@ -9,7 +9,7 @@ internal sealed class InternalCommandEntityTypeConfiguration : IEntityTypeConfig
     public void Configure(EntityTypeBuilder<InternalCommand> builder)
     {
         builder.ToTable("InternalCommands", SchemaNames.Application);
-        
+
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Id).ValueGeneratedNever();
     }

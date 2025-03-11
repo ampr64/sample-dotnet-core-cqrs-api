@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.CommonServiceLocator;
 using CommonServiceLocator;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
@@ -18,7 +17,6 @@ using SampleProject.Infrastructure.Processing;
 using SampleProject.Infrastructure.Processing.InternalCommands;
 using SampleProject.Infrastructure.Processing.Outbox;
 using SampleProject.Infrastructure.Quartz;
-using SampleProject.Infrastructure.SeedWork;
 using Serilog;
 
 namespace SampleProject.Infrastructure;
@@ -43,9 +41,9 @@ public class ApplicationStartup
         services.AddSingleton(cacheStore);
 
         var serviceProvider = CreateAutofacServiceProvider(
-            services, 
-            connectionString, 
-            emailSender, 
+            services,
+            connectionString,
+            emailSender,
             emailsSettings,
             logger,
             executionContextAccessor);
@@ -69,7 +67,7 @@ public class ApplicationStartup
         container.RegisterModule(new DataAccessModule(connectionString));
         container.RegisterModule(new MediatorModule());
         container.RegisterModule(new DomainModule());
-        
+
         if (emailSender != null)
         {
             container.RegisterModule(new EmailModule(emailSender, emailsSettings));
@@ -78,7 +76,7 @@ public class ApplicationStartup
         {
             container.RegisterModule(new EmailModule(emailsSettings));
         }
-        
+
         container.RegisterModule(new ProcessingModule());
 
         container.RegisterInstance(executionContextAccessor);
@@ -95,7 +93,7 @@ public class ApplicationStartup
     }
 
     private static void StartQuartz(
-        string connectionString, 
+        string connectionString,
         EmailsSettings emailsSettings,
         ILogger logger,
         IExecutionContextAccessor executionContextAccessor)

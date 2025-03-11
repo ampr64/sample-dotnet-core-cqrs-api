@@ -37,9 +37,9 @@ public class OrdersTests : TestBase
 
         var connection = new SqlConnection(ConnectionString);
         var messagesList = await OutboxMessagesHelper.GetOutboxMessages(connection);
-        
+
         Assert.That(messagesList.Count, Is.EqualTo(3));
-        
+
         var customerRegisteredNotification =
             OutboxMessagesHelper.Deserialize<CustomerRegisteredNotification>(messagesList[0]);
 

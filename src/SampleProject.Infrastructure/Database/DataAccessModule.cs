@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SampleProject.Application.Configuration.Data;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.Payments;
@@ -10,7 +9,6 @@ using SampleProject.Infrastructure.Domain;
 using SampleProject.Infrastructure.Domain.Customers;
 using SampleProject.Infrastructure.Domain.Payments;
 using SampleProject.Infrastructure.Domain.Products;
-using SampleProject.Infrastructure.SeedWork;
 
 namespace SampleProject.Infrastructure.Database;
 

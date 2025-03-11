@@ -17,19 +17,19 @@ internal sealed class CustomerEntityTypeConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<Customer> builder)
     {
         builder.ToTable("Customers", SchemaNames.Orders);
-        
+
         builder.HasKey(b => b.Id);
 
         builder.Property("_welcomeEmailWasSent").HasColumnName("WelcomeEmailWasSent");
         builder.Property("_email").HasColumnName("Email");
         builder.Property("_name").HasColumnName("Name");
-        
+
         builder.OwnsMany<Order>(OrdersList, x =>
         {
             x.WithOwner().HasForeignKey("CustomerId");
 
             x.ToTable("Orders", SchemaNames.Orders);
-            
+
             x.Property<bool>("_isRemoved").HasColumnName("IsRemoved");
             x.Property<DateTime>("_orderDate").HasColumnName("OrderDate");
             x.Property<DateTime?>("_orderChangeDate").HasColumnName("OrderChangeDate");
@@ -45,7 +45,7 @@ internal sealed class CustomerEntityTypeConfiguration : IEntityTypeConfiguration
                 y.ToTable("OrderProducts", SchemaNames.Orders);
                 y.Property<OrderId>("OrderId");
                 y.Property<ProductId>("ProductId");
-                
+
                 y.HasKey("OrderId", "ProductId");
 
                 y.OwnsOne<MoneyValue>("Value", mv =>

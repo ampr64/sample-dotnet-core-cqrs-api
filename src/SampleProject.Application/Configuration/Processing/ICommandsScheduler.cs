@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using SampleProject.Application.Configuration.Commands;
+﻿using SampleProject.Application.Configuration.Commands;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Configuration.Processing;
 

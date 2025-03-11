@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SampleProject.Application.Configuration.Commands;
+using System;
 using System.Collections.Generic;
-using SampleProject.Application.Configuration.Commands;
 
 namespace SampleProject.Application.Orders.PlaceCustomerOrder;
 

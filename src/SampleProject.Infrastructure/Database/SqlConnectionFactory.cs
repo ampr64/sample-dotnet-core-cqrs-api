@@ -1,7 +1,7 @@
-﻿using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using SampleProject.Application.Configuration.Data;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SampleProject.Infrastructure.Database;
 

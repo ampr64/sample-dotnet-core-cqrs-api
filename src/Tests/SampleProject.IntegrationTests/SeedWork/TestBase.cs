@@ -1,4 +1,3 @@
-using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +6,7 @@ using NUnit.Framework;
 using SampleProject.Application.Configuration.Emails;
 using SampleProject.Infrastructure;
 using Serilog.Core;
+using System.Data;
 
 namespace SampleProject.IntegrationTests.SeedWork;
 

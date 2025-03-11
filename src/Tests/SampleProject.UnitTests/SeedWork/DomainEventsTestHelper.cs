@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using SampleProject.Domain.SeedWork;
+using System.Collections;
 using System.Reflection;
-using SampleProject.Domain.SeedWork;
 
 namespace SampleProject.UnitTests.SeedWork;
 

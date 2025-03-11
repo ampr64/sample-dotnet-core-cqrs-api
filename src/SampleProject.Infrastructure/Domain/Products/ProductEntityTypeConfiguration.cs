@@ -10,7 +10,7 @@ internal sealed class ProductEntityTypeConfiguration : IEntityTypeConfiguration<
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.ToTable("Products", SchemaNames.Orders);
-        
+
         builder.HasKey(b => b.Id);
 
         builder.OwnsMany<ProductPrice>("_prices", y =>

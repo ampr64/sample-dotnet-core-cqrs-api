@@ -17,7 +17,7 @@ public class CustomersTests : TestBase
     {
         const string email = "newCustomer@mail.com";
         const string name = "Sample Company";
-        
+
         var customer = await CommandsExecutor.Execute(new RegisterCustomerCommand(email, name));
         var customerDetails = await QueriesExecutor.Execute(new GetCustomerDetailsQuery(customer.Id));
 

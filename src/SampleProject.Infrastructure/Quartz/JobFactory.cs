@@ -11,8 +11,8 @@ public class JobFactory(IContainer container) : IJobFactory
     public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
     {
         var job = _container.Resolve(bundle.JobDetail.JobType);
-            
-        return job  as IJob;
+
+        return (job as IJob)!;
     }
 
     public void ReturnJob(IJob job)

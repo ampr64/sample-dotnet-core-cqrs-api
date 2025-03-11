@@ -1,9 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using SampleProject.Application.Configuration.Commands;
+﻿using SampleProject.Application.Configuration.Commands;
 using SampleProject.Domain.Customers;
 using SampleProject.Domain.Customers.Orders;
 using SampleProject.Domain.SeedWork;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SampleProject.Application.Customers.RegisterCustomer;
 

@@ -25,7 +25,7 @@ public class MoneyValueTests : TestBase
             MoneyValue.Of(120, currency!);
         });
     }
-    
+
     [TestCase("PLN")]
     [TestCase("ARS")]
     public void MoneyValueOf_WhenCurrencyIsNotSupported_ThrowsCurrencyMustBeSupportedRuleBroken(string currency)

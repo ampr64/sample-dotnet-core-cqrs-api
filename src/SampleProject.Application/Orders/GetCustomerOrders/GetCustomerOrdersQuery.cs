@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SampleProject.Application.Configuration.Queries;
+using System;
 using System.Collections.Generic;
-using SampleProject.Application.Configuration.Queries;
 
 namespace SampleProject.Application.Orders.GetCustomerOrders;
 

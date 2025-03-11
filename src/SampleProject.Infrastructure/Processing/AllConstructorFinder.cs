@@ -1,14 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using Autofac.Core.Activators.Reflection;
+using System.Collections.Concurrent;
 using System.Reflection;
-using Autofac.Core.Activators.Reflection;
 
 namespace SampleProject.Infrastructure.Processing;
 
 internal class AllConstructorFinder : IConstructorFinder
 {
-    private static readonly ConcurrentDictionary<Type, ConstructorInfo[]> Cache =
-        new ConcurrentDictionary<Type, ConstructorInfo[]>();
-
+    private static readonly ConcurrentDictionary<Type, ConstructorInfo[]> Cache = [];
 
     public ConstructorInfo[] FindConstructors(Type targetType)
     {

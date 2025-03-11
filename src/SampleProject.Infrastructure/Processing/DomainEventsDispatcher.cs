@@ -9,7 +9,9 @@ using System.Text.Json;
 
 namespace SampleProject.Infrastructure.Processing;
 
-public class DomainEventsDispatcher(IMediator mediator, ILifetimeScope scope, OrdersContext ordersContext) : IDomainEventsDispatcher
+public class DomainEventsDispatcher(IMediator mediator,
+    ILifetimeScope scope,
+    OrdersContext ordersContext) : IDomainEventsDispatcher
 {
     private readonly IMediator _mediator = mediator;
     private readonly ILifetimeScope _scope = scope;

@@ -1,5 +1,5 @@
-﻿using System;
-using SampleProject.Application.Configuration.Commands;
+﻿using SampleProject.Application.Configuration.Commands;
+using System;
 
 namespace SampleProject.Application.Orders.RemoveCustomerOrder;
 

@@ -21,7 +21,7 @@ internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<Change
 
     internal ChangeCustomerOrderCommandHandler(
         ICustomerRepository customerRepository,
-        IForeignExchange foreignExchange, 
+        IForeignExchange foreignExchange,
         ISqlConnectionFactory sqlConnectionFactory)
     {
         _customerRepository = customerRepository;
@@ -46,9 +46,9 @@ internal sealed class ChangeCustomerOrderCommandHandler : ICommandHandler<Change
 
         customer.ChangeOrder(
             orderId,
-            allProductPrices, 
-            orderProducts, 
-            conversionRates, 
+            allProductPrices,
+            orderProducts,
+            conversionRates,
             request.Currency);
     }
 }

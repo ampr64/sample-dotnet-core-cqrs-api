@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using MediatR;
 using SampleProject.Application.Configuration.Commands;
 using SampleProject.Application.Configuration.Data;
 using System.Text.Json;
