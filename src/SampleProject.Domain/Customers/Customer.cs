@@ -51,7 +51,7 @@ public class Customer : Entity, IAggregateRoot
         string currency, 
         List<ConversionRate> conversionRates)
     {
-        CheckRule(new CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule(_orders));
+        CheckRule(new CustomerCannotOrderMoreThanTwiceADayRule(_orders));
         CheckRule(new OrderMustHaveAtLeastOneProductRule(orderProductsData));
 
         var order = Order.CreateNew(orderProductsData, allProductPrices, currency, conversionRates);

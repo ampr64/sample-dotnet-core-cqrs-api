@@ -28,19 +28,18 @@ public class PlaceOrderTests : TestBase
             SampleProductPrices.Product1EUR, SampleProductPrices.Product1USD
         };
 
-        const string currency = "EUR";
         var conversionRates = GetConversionRates();
 
         // Act
         customer.PlaceOrder(
             orderProductsData,
             allProductPrices,
-            currency,
+            Currency.Euro,
             conversionRates);
 
         // Assert
         var orderPlaced = AssertPublishedDomainEvent<OrderPlacedEvent>(customer);
-        Assert.That(orderPlaced.Value, Is.EqualTo(MoneyValue.Of(200, "EUR")));
+        Assert.That(orderPlaced.Value, Is.EqualTo(MoneyValue.Of(200, Currency.Euro)));
     }
 
     [Test]
@@ -72,7 +71,7 @@ public class PlaceOrderTests : TestBase
     }
 
     [Test]
-    public void PlaceOrder_GivenTwoOrdersInThatDayAlreadyMade_BreaksCustomerCannotOrderMoreThan2OrdersOnTheSameDayRule()
+    public void PlaceOrder_GivenTwoOrdersInThatDayAlreadyMade_BreaksCustomerCannotOrderMoreThanTwiceADayRule()
     {
         // Arrange
         var customer = CustomerFactory.Create();
@@ -107,7 +106,7 @@ public class PlaceOrderTests : TestBase
         SystemClock.Set(new DateTime(2020, 1, 10, 12, 00, 0));
 
         // Assert
-        AssertBrokenRule<CustomerCannotOrderMoreThan2OrdersOnTheSameDayRule>(() =>
+        AssertBrokenRule<CustomerCannotOrderMoreThanTwiceADayRule>(() =>
         {
             // Act
             customer.PlaceOrder(
@@ -120,33 +119,30 @@ public class PlaceOrderTests : TestBase
 
     private static List<ConversionRate> GetConversionRates()
     {
-
-        var conversionRates = new List<ConversionRate>
-        {
-            new("USD", "EUR", (decimal)0.88),
-            new("EUR", "USD", (decimal)1.13)
-        };
+        List<ConversionRate> conversionRates =
+        [
+            new(Currency.UsDollar, Currency.Euro, (decimal)0.88),
+            new(Currency.Euro, Currency.UsDollar, (decimal)1.13)
+        ];
 
         return conversionRates;
     }
 }
 
-
-
 public class SampleProducts
 {
-    public static readonly ProductId Product1Id = new ProductId(Guid.NewGuid());
+    public static readonly ProductId Product1Id = new(Guid.NewGuid());
 
-    public static readonly ProductId Product2Id = new ProductId(Guid.NewGuid());
+    public static readonly ProductId Product2Id = new(Guid.NewGuid());
 }
 
 public class SampleProductPrices
 {
-    public static readonly ProductPriceData Product1EUR = new ProductPriceData(
+    public static readonly ProductPriceData Product1EUR = new(
         SampleProducts.Product1Id,
-        MoneyValue.Of(100, "EUR"));
+        MoneyValue.Of(100, Currency.Euro));
 
-    public static readonly ProductPriceData Product1USD = new ProductPriceData(
+    public static readonly ProductPriceData Product1USD = new(
         SampleProducts.Product1Id,
-        MoneyValue.Of(110, "USD"));
+        MoneyValue.Of(110, Currency.UsDollar));
 }
