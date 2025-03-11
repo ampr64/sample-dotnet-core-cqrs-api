@@ -4,7 +4,7 @@ namespace SampleProject.Infrastructure;
 
 public static class CompositionRoot
 {
-    private static IContainer _container;
+    private static IContainer? _container;
 
     public static void SetContainer(IContainer container)
     {
@@ -13,6 +13,6 @@ public static class CompositionRoot
 
     internal static ILifetimeScope BeginLifetimeScope()
     {
-        return _container.BeginLifetimeScope();
+        return _container?.BeginLifetimeScope() ?? throw new ApplicationException("Container was never set.");
     }
 }
