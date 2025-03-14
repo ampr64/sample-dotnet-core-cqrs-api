@@ -27,10 +27,10 @@ public class Order : Entity
     {
     }
 
-    private Order(IEnumerable<OrderProductData> orderProductsData,
-        IEnumerable<ProductPriceData> productPrices,
+    private Order(IReadOnlyList<OrderProductData> orderProductsData,
+        IReadOnlyList<ProductPriceData> productPrices,
         Currency currency,
-        IEnumerable<ConversionRate> conversionRates)
+        IReadOnlyList<ConversionRate> conversionRates)
     {
         _orderDate = SystemClock.Now;
         Id = new OrderId(Guid.NewGuid());
